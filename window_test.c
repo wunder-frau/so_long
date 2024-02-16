@@ -27,16 +27,18 @@
 // 	{
 // 		for (uint32_t y = 0; y < image->height; ++y)
 // 		{
-// 			uint32_t color = ft_pixel(
-// 				rand() % 0xFF, // R
-// 				rand() % 0xFF, // G
-// 				rand() % 0xFF, // B
-// 				rand() % 0xFF  // A
-// 			);
-// 			mlx_put_pixel(image, i, y, color);
+// 			// uint32_t color = ft_pixel(
+// 			// 	rand() % 0xFF, // R
+// 			// 	rand() % 0xFF, // G
+// 			// 	rand() % 0xFF, // B
+// 			// 	rand() % 0xFF  // A
+// 			// );
+// 			//mlx_put_pixel(image, i, y, color);
+// 			mlx_put_pixel(image, i, y, 0xD461D3);
 // 		}
 // 	}
 // }
+
 
 // void ft_hook(void* param)
 // {
@@ -94,8 +96,39 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "MLX42/MLX42.h"
-#define WIDTH 256
-#define HEIGHT 256
+#define WIDTH 512
+#define HEIGHT 512
+
+static mlx_image_t* img;
+
+
+int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
+{
+    return (r << 24 | g << 16 | b << 8 | a);
+}
+
+void ft_randomize(void* param)
+{
+    (void)param;
+    uint32_t i = 0;
+    while (i < img->width)
+    {
+        uint32_t y = 0;
+        while (y < img->height)
+        {
+            uint32_t color = ft_pixel(
+                rand() % 0xFF, // R
+                rand() % 0xFF, // G
+                rand() % 0xFF, // B
+                rand() % 0xFF  // A
+            );
+            mlx_put_pixel(img, i, y, color);
+            //mlx_put_pixel(img, i, y, 0xD461D3);
+            y++;
+        }
+        i++;
+    }
+}
 
 // Exit the program as failure.
 static void ft_error(void)
@@ -110,13 +143,15 @@ static void ft_hook(void* param)
 	const mlx_t* mlx = param;
 
 	printf("WIDTH: %d | HEIGHT: %d\n", mlx->width, mlx->height);
+	if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
+		mlx_close_window(param);
 }
 
 int32_t	main(void)
 {
 
 	// MLX allows you to define its core behaviour before startup.
-	mlx_set_setting(MLX_MAXIMIZED, true);
+	//mlx_set_setting(MLX_MAXIMIZED, true);
 	mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "42Balls", true);
 	if (!mlx)
 		ft_error();
@@ -124,16 +159,17 @@ int32_t	main(void)
 	/* Do stuff */
 
 	// Create and display the image.
-	mlx_image_t* img = mlx_new_image(mlx, 256, 256);
-	if (!img || (mlx_image_to_window(mlx, img, 0, 0) < 0))
+	img = mlx_new_image(mlx, 56, 56);
+	if (!img || (mlx_image_to_window(mlx, img, 180, 50) < 0))
 		ft_error();
 
 	// Even after the image is being displayed, we can still modify the buffer.
-	mlx_put_pixel(img, 0, 0, 0xFF0000FF);
-
+	mlx_put_pixel(img, 200, 200, 0xFF0000FF);
+	mlx_put_pixel(img, 400, 200, 0xD461D3);
 	// Register a hook and pass mlx as an optional param.
 	// NOTE: Do this before calling mlx_loop!
 	mlx_loop_hook(mlx, ft_hook, mlx);
+		mlx_loop_hook(mlx, ft_randomize, mlx);
 	mlx_loop(mlx);
 	mlx_terminate(mlx);
 	return (EXIT_SUCCESS);
