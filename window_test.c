@@ -100,7 +100,7 @@
 #define HEIGHT 512
 
 static mlx_image_t* img;
-
+static mlx_image_t* test;
 
 int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 {
@@ -123,7 +123,7 @@ void ft_randomize(void* param)
                 rand() % 0xFF  // A
             );
             mlx_put_pixel(img, i, y, color);
-            //mlx_put_pixel(img, i, y, 0xD461D3);
+            mlx_put_pixel(test, i, y, 0xD461D3);
             y++;
         }
         i++;
@@ -163,6 +163,9 @@ int32_t	main(void)
 	if (!img || (mlx_image_to_window(mlx, img, 180, 50) < 0))
 		ft_error();
 
+    test = mlx_new_image(mlx, 100, 100);
+	if (!test || (mlx_image_to_window(mlx, test, 50, 50) < 0))
+	ft_error();
 	// Even after the image is being displayed, we can still modify the buffer.
 	mlx_put_pixel(img, 200, 200, 0xFF0000FF);
 	mlx_put_pixel(img, 400, 200, 0xD461D3);
