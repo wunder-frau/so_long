@@ -143,9 +143,29 @@ static void ft_hook(void* param)
 	const mlx_t* mlx = param;
 
 	printf("WIDTH: %d | HEIGHT: %d\n", mlx->width, mlx->height);
+	// if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
+	// 	mlx_close_window(param);
 	if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
 		mlx_close_window(param);
+	if (mlx_is_key_down(param, MLX_KEY_UP))
+		img->instances[0].y -= 5;
+	if (mlx_is_key_down(param, MLX_KEY_DOWN))
+		img->instances[0].y += 5;
+	if (mlx_is_key_down(param, MLX_KEY_LEFT))
+		img->instances[0].x -= 5;
+	if (mlx_is_key_down(param, MLX_KEY_RIGHT))
+		img->instances[0].x += 5;
+
+	if (mlx_is_key_down(param, MLX_KEY_UP))
+		test->instances[0].y -= 5;
+	if (mlx_is_key_down(param, MLX_KEY_DOWN))
+		test->instances[0].y += 5;
+	if (mlx_is_key_down(param, MLX_KEY_LEFT))
+		test->instances[0].x -= 5;
+	if (mlx_is_key_down(param, MLX_KEY_RIGHT))
+		test->instances[0].x += 5;
 }
+
 
 int32_t	main(void)
 {
