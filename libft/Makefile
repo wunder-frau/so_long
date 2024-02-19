@@ -31,7 +31,11 @@ SRCS =	ft_isalpha.c \
 	ft_split.c \
 	ft_itoa.c \
 	ft_strmapi.c \
-	ft_striteri.c
+	ft_striteri.c \
+	$(addprefix ./ft_printf/, ft_printf.c ft_put_digit.c \
+				ft_put_unumber.c ft_putchar.c ft_putstr.c \
+							ft_put_percent.c ft_put_ptr.c) \
+	$(addprefix ./get_next_line/, get_next_line.c get_next_line_utils.c)
 
 SRCS_BONUS = ft_lstnew_bonus.c \
 	ft_lstadd_front_bonus.c \
