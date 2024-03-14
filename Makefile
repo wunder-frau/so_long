@@ -4,7 +4,7 @@ LIBMLX	:= ./MLX42
 
 HEADERS	:= -I ./include -I $(LIBMLX)/include
 LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -pthread -lm
-SRCS	:= window_test.c
+SRCS	:= $(addprefix ./srcs/, window_test.c main.c game.c map.c map_check.c helpers.c)
 LIBFT 	:= libft/libft.a
 OBJS	:= ${SRCS:.c=.o}
 
