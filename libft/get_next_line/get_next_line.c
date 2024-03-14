@@ -29,7 +29,7 @@ static char	*ft_extract_next_line(char **temp)
 		*temp = NULL;
 		return (NULL);
 	}
-	rem_txt = ft_substr (rem_txt, 0, ft_strlen (rem_txt));
+	rem_txt = ft_substr (rem_txt, 0,  ft_strlen_gnl(rem_txt));
 	free (*temp);
 	*temp = rem_txt;
 	return (extr_line);
@@ -50,7 +50,7 @@ static char	*ft_concat_lines(char *temp, int fd, char *buf)
 			return (NULL);
 		}
 		buf[bytes_read] = '\0';
-		temp = ft_strjoin(temp, buf);
+		temp = ft_strjoin_gnl(temp, buf);
 		if (!temp)
 		{
 			free(buf);
