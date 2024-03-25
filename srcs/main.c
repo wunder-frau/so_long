@@ -20,11 +20,13 @@ void first_line_len(char *line)
     int i = 0;
     while (line[i] && line[i] != '\n')
     {
-        first_line_len = ft_strlen(line);
-        //ft_putstr(line);
-        printf("\nLength of first line: %d\n", first_line_len);
+        //first_line_len = ft_strlen(line);
+        first_line_len++;
         i++;
     }
+    // ft_putstr(line);
+    // ft_printf("/n");
+    printf("\nLength of first line: %d\n", first_line_len);
 }
 
 void parse_map(char *file, t_span *s)
@@ -64,7 +66,8 @@ t_point *init_map(char *file)
     int y = 0;
     while (y < s.ny) {
         int x = 0;
-        while (x < s.nx) {
+        while (x < s.nx)
+        {
             printf("%c", s.flatten[s.nx * y + x].c);
             ++x;
         }
