@@ -1,6 +1,6 @@
 NAME		=	so_long
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g
 SRCS		=	$(addprefix ./srcs/, main.c)
 OBJS		=	$(SRCS:.c=.o)
 HEADER		=	so_long.h
