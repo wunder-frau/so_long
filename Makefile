@@ -1,7 +1,7 @@
 NAME		=	so_long
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
-SRCS		=	main.c
+SRCS		=	$(addprefix ./srcs/, main.c)
 OBJS		=	$(SRCS:.c=.o)
 HEADER		=	so_long.h
 GLFW_DIR	=	/Users/$(USER)/.brew/opt/glfw/lib
