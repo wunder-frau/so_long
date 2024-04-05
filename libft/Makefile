@@ -48,11 +48,10 @@ SRCS_BONUS = ft_lstnew_bonus.c \
 	ft_lstmap_bonus.c
 
 OBJ = $(SRCS:.c=.o)
-INCLUDES_DIR = ../includes/
 OBJ_BONUS = $(SRCS_BONUS:.c=.o)
 NAME = libft.a
 CC = cc
-CFLAGS += -Wall -Wextra -Werror -I $(INCLUDES_DIR)
+CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 

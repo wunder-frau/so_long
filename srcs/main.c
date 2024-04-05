@@ -14,19 +14,48 @@ int	open_file(char	*file)
 	return (fd);
 }
 
-void first_line_len(char *line)
+// int first_line_len(char *line)
+// {
+//     int first_line_len = 0;
+//     int i = 0;
+//     while (line[i] && line[i] != '\n')
+//     {
+//         //first_line_len = ft_strlen(line);
+//         first_line_len++;
+//         i++;
+//     }
+//     // ft_putstr(line);
+//     // ft_printf("/n");
+//     printf("\nfirst_line_len: %d\n", first_line_len);
+//     return (first_line_len);
+// }
+
+int first_line_len(char *file)
 {
     int first_line_len = 0;
+    int fd;
+    char *line;
+
+    fd = open_file(file);
+    line = get_next_line(fd);
+    close(fd);
+
+    if (!line)
+    {
+        return -1;
+    }
+
     int i = 0;
     while (line[i] && line[i] != '\n')
     {
-        //first_line_len = ft_strlen(line);
         first_line_len++;
         i++;
     }
-    // ft_putstr(line);
-    // ft_printf("/n");
-    printf("\nLength of first line: %d\n", first_line_len);
+
+    printf("\nfirst_line_len: %d\n", first_line_len);
+    free(line);
+
+    return (first_line_len);
 }
 
 void parse_map(char *file, t_span *s)
@@ -40,15 +69,18 @@ void parse_map(char *file, t_span *s)
     y = 0;
     while (y < s->ny) {
         char *line = get_next_line(fd);
-        first_line_len(line);
+        ft_strlen_gnl(line);
+        //s->nx = first_line_len(line);
         x = 0;
-        while (x < s->nx) {
+        while (x < s->nx)
+        {
             p.c = line[x];
             p.x = x;
             p.y = y;
             s->flatten[s->nx * y + x] = p;
             ++x;
         }
+        free(line);
         ++y;
     }
     close(fd);
@@ -57,11 +89,16 @@ void parse_map(char *file, t_span *s)
 t_point *init_map(char *file)
 { 
     t_span s;
-    s.nx = 13;
+    printf("\ninit_map00: %d\n", s.nx);
+    //s.nx = first_line_len(file);
+    s.nx = first_line_len(file);
+    printf("\ninit_map0: %d\n", s.nx);
     s.ny = 5;
 
     s.flatten = (t_point *)malloc(sizeof(t_point) * s.nx * s.ny);
     parse_map(file, &s);
+
+        printf("\ninit_map1: %d\n", s.nx);
 
     int y = 0;
     while (y < s.ny) {
