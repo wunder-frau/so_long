@@ -16,7 +16,17 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+# include <stdarg.h>
 
+# define FT_BASE10 "0123456789"
+# define FT_BASE16_UPPER "0123456789ABCDEF"
+# define FT_BASE16_LOWER "0123456789abcdef"
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
+/* libft */
 typedef struct s_list
 {
 	void			*content;
@@ -66,5 +76,19 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+
+/* ft_printf */
+int	ft_putchar(char c);
+int	ft_put_percent(void);
+int	ft_putstr(const char *s);
+int	ft_put_unumber(unsigned long n, const char *base);
+int	ft_put_ptr(unsigned long p);
+int	ft_put_digit(int nb);
+int	ft_printf(const char *format_str, ...);
+
+/* get_next_line */
+size_t	ft_strlen_gnl(const char *str);
+char	*ft_strjoin_gnl(char *s1, char const *s2);
+char	*get_next_line(int fd);
 
 #endif

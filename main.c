@@ -1,4 +1,4 @@
-#include "../so_long.h"
+#include "so_long.h"
 #include "string.h"
 
 int	open_file(char	*file)

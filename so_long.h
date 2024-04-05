@@ -4,10 +4,12 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <stdbool.h>
+//# include "libft/libft.h"
 # include "./MLX42/include/MLX42/MLX42.h"
-# include "libft/libft.h"
-# include "libft/ft_printf/ft_printf.h"
-# include "libft/get_next_line/get_next_line.h"
+# include "./libft/libft.h"
+//# include "MLX42.h"
+// # include "libft/ft_printf/ft_printf.h"
+// # include "libft/get_next_line/get_next_line.h"
 
 // # ifndef TILE_SIZE
 // #  define TILE_SIZE 50
