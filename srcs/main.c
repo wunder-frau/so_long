@@ -29,34 +29,59 @@ int	open_file(char	*file)
 //     printf("\nfirst_line_len: %d\n", first_line_len);
 //     return (first_line_len);
 // }
-
 int first_line_len(char *file)
 {
     int first_line_len = 0;
-    int fd;
-    char *line;
-
-    fd = open_file(file);
-    line = get_next_line(fd);
-    close(fd);
-
-    if (!line)
+    int fd = open(file, O_RDONLY);
+    if (fd == -1)
     {
+        // Error opening file
         return -1;
     }
 
-    int i = 0;
-    while (line[i] && line[i] != '\n')
+    char c;
+    while (read(fd, &c, 1) > 0)
     {
+        if (c == '\n')
+        {
+            break; // Stop counting at the first newline character
+        }
         first_line_len++;
-        i++;
     }
 
-    printf("\nfirst_line_len: %d\n", first_line_len);
-    free(line);
+    close(fd);
 
-    return (first_line_len);
+    printf("\nfirst_line_len: %d\n", first_line_len);
+
+    return first_line_len;
 }
+// int first_line_len(char *file)
+// {
+//     int first_line_len = 0;
+//     int fd;
+//     char *line;
+
+//     fd = open_file(file);
+//     line = get_next_line(fd);
+//     close(fd);
+
+//     if (!line)
+//     {
+//         return -1;
+//     }
+
+//     int i = 0;
+//     while (line[i] && line[i] != '\n')
+//     {
+//         first_line_len++;
+//         i++;
+//     }
+
+//     printf("\nfirst_line_len: %d\n", first_line_len);
+//     free(line);
+
+//     return (first_line_len);
+// }
 
 void parse_map(char *file, t_span *s)
 {
@@ -69,7 +94,7 @@ void parse_map(char *file, t_span *s)
     y = 0;
     while (y < s->ny) {
         char *line = get_next_line(fd);
-        ft_strlen_gnl(line);
+        //ft_strlen_gnl(line);
         //s->nx = first_line_len(line);
         x = 0;
         while (x < s->nx)
@@ -90,18 +115,19 @@ t_point *init_map(char *file)
 { 
     t_span s;
     printf("\ninit_map00: %d\n", s.nx);
-    //s.nx = first_line_len(file);
     s.nx = first_line_len(file);
+    //s.nx = 13;
     printf("\ninit_map0: %d\n", s.nx);
     s.ny = 5;
 
     s.flatten = (t_point *)malloc(sizeof(t_point) * s.nx * s.ny);
     parse_map(file, &s);
 
-        printf("\ninit_map1: %d\n", s.nx);
+    printf("\ninit_map1: %d\n", s.nx);
 
     int y = 0;
-    while (y < s.ny) {
+    while (y < s.ny)
+    {
         int x = 0;
         while (x < s.nx)
         {
