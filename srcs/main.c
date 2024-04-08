@@ -55,6 +55,47 @@ int first_line_len(char *file)
 
     return first_line_len;
 }
+
+// int count_rows(char *file) {
+//     int fd = open_file(file);
+//     int row_count = 0;
+//     char c;
+    
+//     while (read(fd, &c, 1) > 0) {
+//         if (c == '\n') {
+//             row_count++;
+//         }
+//     }
+    
+//     close(fd);
+//     return row_count;
+// }
+int count_rows(char *file) {
+    int fd = open_file(file);
+    int row_count = 0;
+    char c;
+    int eof = 0; // Flag to track end of file
+    
+    while (read(fd, &c, 1) > 0) {
+        if (c == '\n') {
+            row_count++;
+        } else if (c == EOF) {
+            // If the last character is EOF and not '\n', it's still a line
+            // So, we increment row_count
+            eof = 1;
+        }
+    }
+    
+    close(fd);
+    
+    // If the file doesn't end with a newline, increment row_count
+    if (!eof) {
+        row_count++;
+    }
+    
+    return row_count;
+}
+
 // int first_line_len(char *file)
 // {
 //     int first_line_len = 0;
@@ -118,7 +159,7 @@ t_point *init_map(char *file)
     s.nx = first_line_len(file);
     //s.nx = 13;
     printf("\ninit_map0: %d\n", s.nx);
-    s.ny = 5;
+    s.ny = count_rows(file);
 
     s.flatten = (t_point *)malloc(sizeof(t_point) * s.nx * s.ny);
     parse_map(file, &s);
