@@ -36,6 +36,7 @@
 typedef struct s_point {
     char c;
     int x, y;
+    mlx_t *window;
 } t_point;
 
 typedef struct s_span {
@@ -43,4 +44,8 @@ typedef struct s_span {
     int nx, ny;
 } t_span;
 
+// typedef struct s_data
+// {
+// 	mlx_t			*window;
+// }	t_data;
 # endif

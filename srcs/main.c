@@ -32,7 +32,7 @@ int	open_file(char	*file)
 int first_line_len(char *file)
 {
     int first_line_len = 0;
-    int fd = open(file, O_RDONLY);
+    int fd = open_file(file);
     if (fd == -1)
     {
         // Error opening file
@@ -51,7 +51,7 @@ int first_line_len(char *file)
 
     close(fd);
 
-    printf("\nfirst_line_len: %d\n", first_line_len);
+    //printf("\nfirst_line_len: %d\n", first_line_len);
 
     return first_line_len;
 }
@@ -180,14 +180,135 @@ t_point *init_map(char *file)
     }
     return (s.flatten);
 }
+// mlx_t *init_window(int nx, int ny)
+// {
+//     mlx_t *mlx;
+
+//     mlx = mlx_init((nx + 1) * 50, (ny + 1) * 50, "so_long", true);
+//     if (!mlx)
+//         return NULL;
+
+//     return mlx;
+// }
+// mlx_t *init_window(char *file)
+// { 
+//     t_span s;
+//     s.nx = first_line_len(file);
+//     s.ny = count_rows(file);
+
+//     s.flatten = (t_point *)malloc(sizeof(t_point) * s.nx * s.ny);
+//     parse_map(file, &s);
+
+//     int window_width = (s.nx + 1) * 50;
+//     int window_height = (s.ny + 1) * 50;
+
+//     // Initialize window
+//     mlx_t *mlx = mlx_init(window_width, window_height, "Map Window", true);
+
+//     // Free allocated memory for the flattened array
+//     free(s.flatten);
+
+//     return mlx;
+// }
+
+void	window_input_hook(void *param)
+{
+	if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
+		mlx_close_window(param);
+}
+
+mlx_t *init_window(char *file) {
+    t_span s;
+    s.nx = first_line_len(file);
+    if (s.nx == -1) {
+        fprintf(stderr, "Error: Failed to determine the size of the first line\n");
+        return NULL;
+    }
+    s.ny = count_rows(file);
+    if (s.ny == -1) {
+        fprintf(stderr, "Error: Failed to count the number of rows\n");
+        return NULL;
+    }
+
+    s.flatten = (t_point *)malloc(sizeof(t_point) * s.nx * s.ny);
+    if (!s.flatten) {
+        fprintf(stderr, "Error: Memory allocation failed\n");
+        return NULL;
+    }
+
+    parse_map(file, &s);
+
+    int window_width = (s.nx + 1) * 50;
+    int window_height = (s.ny + 1) * 50;
+
+    // Initialize window
+    mlx_t *mlx = mlx_init(window_width, window_height, "Map Window", true);
+    if (!mlx) {
+        fprintf(stderr, "Error: Failed to initialize window\n");
+        free(s.flatten); // Free allocated memory before returning
+        return NULL;
+    }
+
+    free(s.flatten);
+
+    return mlx;
+}
 
 int main(int argc, char **argv)
 {
     t_point *data;
+    mlx_t *mlx;
 
-    if (argc != 2)
-        return write(2, "Error\n", 6);
-    data = init_map(argv[1]); 
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s map_file\n", argv[0]);
+        return 1; // Return error code
+    }
+
+    data = init_map(argv[1]);
+    if (!data) {
+        fprintf(stderr, "Error initializing map\n");
+        return 1; // Return error code
+    }
+
+    mlx = init_window(argv[1]);
+    if (!mlx) {
+        fprintf(stderr, "Error initializing window\n");
+        free(data);
+        return 1; // Return error code
+    }
+
+    // Set up key hook
+    //mlx_key_hook(mlx, &window_input_hook, data);
+    if (mlx_loop_hook(mlx, &window_input_hook, mlx) == 0)
+		return (-1);
+    // Start the event loop
+    mlx_loop(mlx);
+
+    // Cleanup
+    mlx_close_window(mlx);
     free(data);
-    return 0;
+
+    return 0; // Return success
 }
+
+
+// int main(int argc, char **argv)
+// {
+//     t_point *data;
+    
+//     if (argc != 2)
+//         return write(2, "Error\n", 6);
+//     data = init_map(argv[1]);
+//     // s.nx = first_line_len(argv[1]);
+//     // s.ny = count_rows(argv[1]);
+//     mlx_t *mlx = init_window(argv[1]);
+//     if (!mlx) {
+//         fprintf(stderr, "Error initializing window\n");
+//         return 1; // Return non-zero to indicate an error
+//     }
+//     mlx_key_hook(data->window, &key_hook, data);
+// 	mlx_loop(data->window);
+//     mlx_close_window(data->window);
+//     free(data);
+//     return 0;
+// }
