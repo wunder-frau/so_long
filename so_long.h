@@ -35,17 +35,19 @@
 typedef struct s_point {
     char            c;
     int             x, y;
-    mlx_t           *window;
-    mlx_image_t		*obstacle;
 } t_point;
 
 typedef struct s_span {
     t_point *flatten;
     int nx, ny;
+    mlx_t			*window;
+    mlx_image_t		*obstacle;
 } t_span;
 
 // typedef struct s_data
 // {
 // 	mlx_t			*window;
+//     mlx_image_t		*obstacle;
 // }	t_data;
+
 # endif
