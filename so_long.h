@@ -11,10 +11,9 @@
 // # include "libft/ft_printf/ft_printf.h"
 // # include "libft/get_next_line/get_next_line.h"
 
-// # ifndef TILE_SIZE
-// #  define TILE_SIZE 50
-// # endif
-
+# ifndef TILE
+#  define TILE 50
+# endif
 // # ifndef FLOOR_TEXTURE
 // #  define FLOOR_TEXTURE "./textures/space_blue.png"
 // # endif
@@ -34,9 +33,10 @@
 // #  define P_TEXTURE "./textures/player_.png"
 
 typedef struct s_point {
-    char c;
-    int x, y;
-    mlx_t *window;
+    char            c;
+    int             x, y;
+    mlx_t           *window;
+    mlx_image_t		*obstacle;
 } t_point;
 
 typedef struct s_span {

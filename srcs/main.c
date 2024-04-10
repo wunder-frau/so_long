@@ -1,7 +1,7 @@
 #include "../so_long.h"
 #include "string.h"
 
-int	open_file(char	*file)
+int open_file(char	*file)
 {
 	int	fd;
 
@@ -14,21 +14,6 @@ int	open_file(char	*file)
 	return (fd);
 }
 
-// int first_line_len(char *line)
-// {
-//     int first_line_len = 0;
-//     int i = 0;
-//     while (line[i] && line[i] != '\n')
-//     {
-//         //first_line_len = ft_strlen(line);
-//         first_line_len++;
-//         i++;
-//     }
-//     // ft_putstr(line);
-//     // ft_printf("/n");
-//     printf("\nfirst_line_len: %d\n", first_line_len);
-//     return (first_line_len);
-// }
 int first_line_len(char *file)
 {
     int first_line_len = 0;
@@ -238,8 +223,8 @@ mlx_t *init_window(char *file) {
 
     parse_map(file, &s);
 
-    int window_width = (s.nx + 1) * 50;
-    int window_height = (s.ny + 1) * 50;
+    int window_width = (s.nx + 1) * TILE;
+    int window_height = (s.ny + 1) * TILE;
 
     // Initialize window
     mlx_t *mlx = mlx_init(window_width, window_height, "Map Window", true);
@@ -253,6 +238,7 @@ mlx_t *init_window(char *file) {
 
     return mlx;
 }
+
 
 int main(int argc, char **argv)
 {
@@ -280,7 +266,7 @@ int main(int argc, char **argv)
     // Set up key hook
     //mlx_key_hook(mlx, &window_input_hook, data);
     if (mlx_loop_hook(mlx, &window_input_hook, mlx) == 0)
-		return (-1);
+		ft_putstr_fd((char *)mlx_strerror(mlx_errno), 2);
     // Start the event loop
     mlx_loop(mlx);
 
