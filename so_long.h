@@ -14,9 +14,9 @@
 # ifndef TILE
 #  define TILE 50
 # endif
-// # ifndef FLOOR_TEXTURE
-// #  define FLOOR_TEXTURE "./textures/space_blue.png"
-// # endif
+# ifndef FLOOR_TEXTURE
+#  define FLOOR_TEXTURE "./textures/test_green.png"
+# endif
 // # ifndef WALL_TEXTURE
 // #  define WALL_TEXTURE "./textures/wall.png"
 // # endif
