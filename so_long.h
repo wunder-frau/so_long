@@ -15,11 +15,11 @@
 #  define TILE 50
 # endif
 # ifndef FLOOR_TEXTURE
-#  define FLOOR_TEXTURE "./textures/test_green.png"
+#  define FLOOR_TEXTURE "./textures/wall.png"
 # endif
-// # ifndef WALL_TEXTURE
-// #  define WALL_TEXTURE "./textures/wall.png"
-// # endif
+# ifndef WALL_TEXTURE
+#  define WALL_TEXTURE "./textures/test_green.png"
+# endif
 // # ifndef PLAYER_TEXTURE
 // #  define PLAYER_TEXTURE "./textures/player.png"
 // # endif
@@ -42,6 +42,7 @@ typedef struct s_span {
     int nx, ny;
     mlx_t			*window;
     mlx_image_t		*obstacle;
+    mlx_image_t     *floor;
 } t_span;
 
 // typedef struct s_data

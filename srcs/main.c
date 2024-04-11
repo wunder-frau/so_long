@@ -90,16 +90,16 @@ mlx_t *init_window(int nx, int ny) {
     return mlx;
 }
 
-mlx_image_t *init_obst(t_span *data) {
-    mlx_image_t *obstacle;
+mlx_image_t *init_image(t_span *data, char *texture_path, char target_char) {
+    mlx_image_t *image;
     int nx = data->nx;
     int ny = data->ny;
     t_point *flatten = data->flatten;
 
-    mlx_texture_t *texture = mlx_load_png(FLOOR_TEXTURE);
-    obstacle = mlx_texture_to_image(data->window, texture);
+    mlx_texture_t *texture = mlx_load_png(texture_path);
+    image = mlx_texture_to_image(data->window, texture);
     mlx_delete_texture(texture);
-    if (!obstacle) {
+    if (!image) {
         fprintf(stderr, "Error: Failed to create image from texture\n");
         return NULL;
     }
@@ -107,30 +107,15 @@ mlx_image_t *init_obst(t_span *data) {
     while (y < ny) {
         int x = 0;
         while (x < nx) {
-            if (flatten[y * nx + x].c == '1') {
-                mlx_image_to_window(data->window, obstacle, x * TILE, y * TILE);
+            if (flatten[y * nx + x].c == target_char) {
+                mlx_image_to_window(data->window, image, x * TILE, y * TILE);
             }
             ++x;
         }
         ++y;
     }
-    return (obstacle);
+    return image;
 }
-
-// // Function to initialize the window
-// mlx_t *init_window(int nx, int ny) {
-//     int window_width = (nx + 1) * TILE;
-//     int window_height = (ny + 1) * TILE;
-
-//     // Initialize window
-//     mlx_t *mlx = mlx_init(window_width, window_height, "Map Window", true);
-//     if (!mlx) {
-//         fprintf(stderr, "Error: Failed to initialize window\n");
-//         return NULL;
-//     }
-
-//     return mlx;
-// }
 
 int init_map_data(char *file, t_span *s) {
     s->nx = first_line_len(file);
@@ -166,51 +151,12 @@ mlx_t *init_map(char *file) {
         return NULL;
     }
     s.window = mlx;
-    s.obstacle = init_obst(&s);
+    s.floor = init_image(&s, FLOOR_TEXTURE, '0');
+    s.obstacle = init_image(&s, WALL_TEXTURE, '1');
+
     free(s.flatten);
     return (mlx);
 }
-
-// // Modified init_map function to initialize the window as well
-// mlx_t *init_map(char *file) {
-//     t_span s;
-//     mlx_t *mlx;
-
-//     s.nx = first_line_len(file);
-//     if (s.nx == -1) {
-//         fprintf(stderr, "Error: Failed to determine the size of the first line\n");
-//         return NULL;
-//     }
-//     s.ny = count_rows(file);
-//     if (s.ny == -1) {
-//         fprintf(stderr, "Error: Failed to count the number of rows\n");
-//         return NULL;
-//     }
-
-//     s.flatten = (t_point *)malloc(sizeof(t_point) * s.nx * s.ny);
-//     if (!s.flatten) {
-//         fprintf(stderr, "Error: Memory allocation failed\n");
-//         return NULL;
-//     }
-
-//     parse_map(file, &s);
-
-//     // Initialize window internally
-//     mlx = init_window(s.nx, s.ny);
-//     if (!mlx) {
-//         fprintf(stderr, "Error initializing window\n");
-//         free(s.flatten);
-//         return NULL;
-//     }
-
-//     // Assign the initialized window to the span struct
-//     s.window = mlx;
-//     s.obstacle = init_obst(&s);
-//     free(s.flatten);
-
-//     // Return the initialized window
-//     return mlx;
-// }
 
 void window_input_hook(void *param) {
     if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
