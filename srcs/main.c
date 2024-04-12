@@ -1,5 +1,4 @@
 #include "../so_long.h"
-#include "string.h"
 
 int open_file(char *file) {
     int fd;
@@ -141,41 +140,58 @@ int init_player_pos(t_span *data) {
     t_point *flatten = data->flatten;
     int nx = data->nx;
     int ny = data->ny;
-    int player_found = 0; // Flag to check if player position is found
+    int player_found = 0; 
 
-    data->player_pos = (t_player_pos *)malloc(sizeof(t_player_pos)); // Allocate memory for player position
+    data->player_pos = (t_player_pos *)malloc(sizeof(t_player_pos));
     if (!data->player_pos) {
         fprintf(stderr, "Error: Memory allocation failed for player position\n");
-        return -1; // Return error code
+        return -1; 
     }
 
     int y = 0;
     while (y < ny) {
         int x = 0;
         while (x < nx) {
-            if (flatten[y * nx + x].c == 'P') { // Check if current position contains player
-                data->player_pos->x = x; // Assign player's x position
-                data->player_pos->y = y; // Assign player's y position
-                player_found = 1; // Set player found flag to true
-                break; // Exit loop once player position is found
+            if (flatten[y * nx + x].c == 'P') {
+                data->player_pos->x = x; 
+                data->player_pos->y = y; 
+                player_found = 1; 
+                break; 
             }
             ++x;
         }
-        if (player_found) { // If player position is found, exit outer loop as well
-        ft_printf("%d, %d, player_f:%d", x, y, player_found);
+        if (player_found) {
+        ft_printf("init_player_pos:%d, %d, player_f:%d\n", data->player_pos->x, data->player_pos->y, player_found);
             break;
         }
         ++y;
     }
 
-    if (!player_found) { // If player position is not found
+    if (!player_found) { 
         fprintf(stderr, "Error: Player position not found\n");
-        free(data->player_pos); // Free allocated memory for player position
-        return -1; // Return error code
+        free(data->player_pos); 
+        return -1;
     }
 
-    return 0; // Return success
+    return 0;
 }
+
+// int find_player_position_index(t_span *data) {
+//     t_point *flatten = data->flatten;
+//     int nx = data->nx;
+//     int ny = data->ny;
+
+//     int index = -1; 
+
+//     for (int i = 0; i < nx * ny; i++) {
+//         if (flatten[i].c == 'P') {
+//             index = i; 
+//             break; 
+//         }
+//     }
+
+//     return index;
+// }
 
 mlx_t *init_map(char *file) {
     t_span s;
@@ -191,15 +207,20 @@ mlx_t *init_map(char *file) {
         return NULL;
     }
     s.window = mlx;
+    ft_printf("After initializing player position: x=%d, y=%d\n", s.player_pos->x, s.player_pos->y);
     s.floor = init_image(&s, TEXTURE_FLOOR, '0');
     s.obstacle = init_image(&s, TEXTURE_WALL, '1');
     s.player = init_image(&s, TEXTURE_PLAYER, 'P');
+    if (init_player_pos(&s) == -1) {
+        fprintf(stderr, "Error initializing player position\n");
+        free(s.flatten);
+        return NULL;
+    }
     s.collect = init_image(&s, TEXTURE_COLLECTABLE, 'C');
     s.exit = init_image(&s, TEXTURE_EXIT, 'E');
-    if (init_player_pos(&s) == -1)
-		return (NULL);
+
     free(s.flatten);
-    return (mlx);
+    return mlx;
 }
 
 void window_input_hook(void *param) {
@@ -207,6 +228,102 @@ void window_input_hook(void *param) {
         mlx_close_window(param);
 }
 
+bool is_obstacle(t_span *data, int x, int y) {
+    int index = y * data->nx + x;
+
+    if (data->flatten[index].c == '1') {
+        return false;
+    }
+
+    return true;
+}
+
+void process_y_move(t_span data, char key) {
+    t_player_pos *pos = data.player_pos;
+
+    //ft_printf("Initial Position: x=%d, y=%d\n", data->player_pos->x, data->player_pos->y);
+     ft_printf("player position in process_y_move: x=%d, y=%d\n", data.player_pos->x, data.player_pos->y);
+    if (key == 'W') {
+        if (!is_obstacle(&data, pos->x, pos->y - 1)) {
+            pos->y--;
+        }
+    } else if (key == 'S') {
+        if (!is_obstacle(&data, pos->x, pos->y + 1)) {
+            pos->y++;
+        }
+    }
+
+    ft_printf("Final Position: x=%d, y=%d\n", pos->x, pos->y);
+}
+
+
+
+
+// void process_y_move(t_span *data, char key) {
+
+//     t_player_pos *pos = data->player_pos;
+//     //ft_printf("%d", data->player_pos);
+
+//     if (key == 'W') {
+//         // if (!is_obstacle(data, pos->x, (pos->y) - 1))
+// 		// {
+//             ft_printf("before:%d", pos->y);
+//             pos->y--;
+//             ft_printf("after:%d", pos->y);
+ //mlx_image_to_window(data->window, data->player, pos->x * TILE, pos->y * TILE);
+//         //}
+//     } else if (key == 'S') {
+//             pos->y++;
+//     }
+// }
+
+// void key_hook(mlx_key_data_t keydata, void *param) {
+//     t_span *data = param;
+
+//     // Process key press events
+//     if (keydata.action == MLX_PRESS) {
+//         if (keydata.key == MLX_KEY_W) {
+//             process_y_move(data, 'W');
+//         } else if (keydata.key == MLX_KEY_S) {
+//             process_y_move(data, 'S');
+//         }
+//     }
+// }
+
+
+
+// void	process_y_move(t_span *data, char key)
+// {
+// 	t_player_pos	*pos;
+
+// 	pos = data->player_pos;
+
+//    // ft_printf("%d", data->player_pos);
+// 	if (key == 'W')
+// 	{
+//         ft_printf("W: %d", data->player_pos);
+//         data->player->instances[0].y -= TILE;
+// 			data->player_pos->y --;
+// 	}
+// 	else if (key == 'S')
+// 	{
+//             ft_printf("S: %d", data->player_pos);
+// 			data->player->instances[0].y += TILE;
+// 			data->player_pos->y ++;
+// 	}
+// }
+
+void	key_hook(mlx_key_data_t keydata, void *param)
+{
+	t_span			*data;
+
+	data = param;
+
+	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
+		process_y_move(*data, 'W');
+	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
+		process_y_move(*data, 'S');
+}
 int main(int argc, char **argv) {
     mlx_t *mlx;
 
@@ -221,6 +338,7 @@ int main(int argc, char **argv) {
     }
     if (mlx_loop_hook(mlx, &window_input_hook, mlx) == 0)
         ft_putstr_fd((char *)mlx_strerror(mlx_errno), 2);
+    mlx_key_hook(mlx, &key_hook, mlx);
     mlx_loop(mlx);
     mlx_close_window(mlx);
     return 0;
