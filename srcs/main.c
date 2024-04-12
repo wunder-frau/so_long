@@ -137,6 +137,46 @@ int init_map_data(char *file, t_span *s) {
     return 0;
 }
 
+int init_player_pos(t_span *data) {
+    t_point *flatten = data->flatten;
+    int nx = data->nx;
+    int ny = data->ny;
+    int player_found = 0; // Flag to check if player position is found
+
+    data->player_pos = (t_player_pos *)malloc(sizeof(t_player_pos)); // Allocate memory for player position
+    if (!data->player_pos) {
+        fprintf(stderr, "Error: Memory allocation failed for player position\n");
+        return -1; // Return error code
+    }
+
+    int y = 0;
+    while (y < ny) {
+        int x = 0;
+        while (x < nx) {
+            if (flatten[y * nx + x].c == 'P') { // Check if current position contains player
+                data->player_pos->x = x; // Assign player's x position
+                data->player_pos->y = y; // Assign player's y position
+                player_found = 1; // Set player found flag to true
+                break; // Exit loop once player position is found
+            }
+            ++x;
+        }
+        if (player_found) { // If player position is found, exit outer loop as well
+        ft_printf("%d, %d, player_f:%d", x, y, player_found);
+            break;
+        }
+        ++y;
+    }
+
+    if (!player_found) { // If player position is not found
+        fprintf(stderr, "Error: Player position not found\n");
+        free(data->player_pos); // Free allocated memory for player position
+        return -1; // Return error code
+    }
+
+    return 0; // Return success
+}
+
 mlx_t *init_map(char *file) {
     t_span s;
     mlx_t *mlx;
@@ -153,7 +193,9 @@ mlx_t *init_map(char *file) {
     s.window = mlx;
     s.floor = init_image(&s, FLOOR_TEXTURE, '0');
     s.obstacle = init_image(&s, WALL_TEXTURE, '1');
-
+    s.player = init_image(&s, PLAYER_TEXTURE, 'P');
+    if (init_player_pos(&s) == -1)
+		return (NULL);
     free(s.flatten);
     return (mlx);
 }
