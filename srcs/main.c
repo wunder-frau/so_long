@@ -191,9 +191,11 @@ mlx_t *init_map(char *file) {
         return NULL;
     }
     s.window = mlx;
-    s.floor = init_image(&s, FLOOR_TEXTURE, '0');
-    s.obstacle = init_image(&s, WALL_TEXTURE, '1');
-    s.player = init_image(&s, PLAYER_TEXTURE, 'P');
+    s.floor = init_image(&s, TEXTURE_FLOOR, '0');
+    s.obstacle = init_image(&s, TEXTURE_WALL, '1');
+    s.player = init_image(&s, TEXTURE_PLAYER, 'P');
+    s.collect = init_image(&s, TEXTURE_COLLECTABLE, 'C');
+    s.exit = init_image(&s, TEXTURE_EXIT, 'E');
     if (init_player_pos(&s) == -1)
 		return (NULL);
     free(s.flatten);

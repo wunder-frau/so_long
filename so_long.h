@@ -14,21 +14,21 @@
 # ifndef TILE
 #  define TILE 50
 # endif
-# ifndef FLOOR_TEXTURE
-#  define FLOOR_TEXTURE "./textures/wall.png"
+# ifndef TEXTURE_FLOOR
+#  define TEXTURE_FLOOR "./textures/wall.png"
 # endif
-# ifndef WALL_TEXTURE
-#  define WALL_TEXTURE "./textures/test_green.png"
+# ifndef TEXTURE_WALL
+#  define TEXTURE_WALL "./textures/test_green.png"
 # endif
-# ifndef PLAYER_TEXTURE
-#  define PLAYER_TEXTURE "./textures/player.png"
+# ifndef TEXTURE_PLAYER
+#  define TEXTURE_PLAYER "./textures/player.png"
 # endif
-# ifndef EXIT_TEXTURE
-#  define EXIT_TEXTURE "./textures/exit.png"
+# ifndef TEXTURE_EXIT
+#  define TEXTURE_EXIT "./textures/exit.png"
 # endif
-// # ifndef COLLECTABLE_TEXTURE
-// #  define COLLECTABLE_TEXTURE "./textures/collectable.png"
-// # endif
+# ifndef TEXTURE_COLLECTABLE
+#  define TEXTURE_COLLECTABLE "./textures/collectable.png"
+# endif
 
 typedef struct s_point {
     char            c;
@@ -48,6 +48,8 @@ typedef struct s_span {
     mlx_image_t		*obstacle;
     mlx_image_t     *floor;
     mlx_image_t     *player;
+    mlx_image_t     *collect;
+    mlx_image_t     *exit;
     t_point			*map;
 	t_player_pos	*player_pos;
 } t_span;
