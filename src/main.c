@@ -39,7 +39,7 @@ char	*get_path(const t_symbol s)
 }
 
 
-//TODO: bool	is_unique(const t_span *map, const t_symbol s)
+//TODO: bool	count(const t_span *map, const t_symbol s)
 
 int open_file(const char *file) {
 	int fd;
@@ -132,7 +132,7 @@ t_span	init(const char *file)
 		exit(1);
 	}
 	fill(file, &map);
-	/* if (!is_unique(&map, player) || !is_unique(&map, escape))
+	/* if (count(&map, player) != 1 || count(&map, escape) != 1)
 	{
 		ft_printf("Error: multiple players or escapes found on the map");
 		free(map.data);
@@ -142,7 +142,7 @@ t_span	init(const char *file)
 }
 //: }}}
 
-//: {{{
+//: draw.c {{{
 mlx_t *init_window(const t_span *map)
 {
 	mlx_t *window = mlx_init(TILE * map->nx, TILE * map->ny, "Map Window", true);
@@ -169,48 +169,64 @@ mlx_image_t	*get_image(mlx_t *window, const t_symbol s)
 	mlx_delete_texture(texture);
 	if (!image)
 	{
-		ft_printf("Error: Failed to create image from texture\n");
+		ft_printf("Error: Failed to create '%s' texture\n", get_path(s));
 		exit(1);
 	}
 	return (image);
 }
 
-/**
- * Draw all symbols from map.
- */
-void draw_images(const t_span *map, mlx_t *window)
+void draw_background(const t_span *map, mlx_t *window)
 {
-	int	i;
-	int	x;
-	int	y;
+	int			i;
+	int			xt;
+	int			yt;
+	t_symbol	curr;
 
 	i = 0;
 	while (i < map->nx * map->ny)
 	{
-		x = (i % map->nx);
-		y = (i / map->nx);
+		curr = map->data[i];
+		if (curr == collectable || curr == player)
+			curr = space;
 
-		mlx_image_to_window(window, get_image(window, map->data[i]), TILE * x, TILE * y);
+		xt = TILE * (i % map->nx);
+		yt = TILE * (i / map->nx);
+		mlx_image_to_window(window, get_image(window, curr), xt, yt);
+		++i;
+	}
+}
+
+void draw_foreground(const t_span *map, mlx_t *window)
+{
+	int			i;
+	int			xt;
+	int			yt;
+	t_symbol	curr;
+
+	i = 0;
+	while (i < map->nx * map->ny)
+	{
+		curr = map->data[i];
+		if (curr == collectable || curr == player)
+		{
+			xt = TILE * (i % map->nx);
+			yt = TILE * (i / map->nx);
+			mlx_image_to_window(window, get_image(window, curr), xt, yt);
+		}
 		++i;
 	}
 }
 //: }}}
 
-int	main(int argc, char **argv)
+void print(const t_span map)
 {
-	mlx_t *window;
+	int	x;
+	int	y;
 
-	if (argc != 2)
-	{
-		ft_printf("Usage: %s map_file\n", argv[0]);
-		exit(1);
-	}
-
-	t_span map = init(argv[1]);
-	int y = 0;
+	y = 0;
 	while (y < map.ny)
 	{
-		int x = 0;
+		x = 0;
 		while (x < map.nx)
 		{
 			ft_printf("%d", map.data[map.nx * y + x]);
@@ -219,9 +235,25 @@ int	main(int argc, char **argv)
 		ft_printf("\n");
 		++y;
 	}
+}
+
+int	main(int argc, char **argv)
+{
+	mlx_t	*window;
+	t_span	map;
+
+	if (argc != 2)
+	{
+		ft_printf("Usage: %s map_file\n", argv[0]);
+		exit(1);
+	}
+
+	map = init(argv[1]);
+	print(map);
 
 	window = init_window(&map);
-	draw_images(&map, window);
+	draw_background(&map, window);
+	draw_foreground(&map, window);
 	if (mlx_loop_hook(window, &window_input_hook, window) == 0)
 		ft_putstr_fd((char *)mlx_strerror(mlx_errno), 2);
 	// mlx_key_hook(window, &key_hook, window);
