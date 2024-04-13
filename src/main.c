@@ -1,20 +1,20 @@
 #include "../so_long.h"
 
-//: map.c {{{
+//: data.c {{{
 t_symbol	convert(const char obj)
 {
 	switch (obj)
 	{
 	case 'C':
-		return (collectable);
+		return (COLLECTABLE);
 	case 'E':
-		return (escape);
+		return (ESCAPE);
 	case '1':
-		return (obstacle);
+		return (OBSTACLE);
 	case 'P':
-		return (player);
+		return (PLAYER);
 	case '0':
-		return (space);
+		return (SPACE);
 	default:
 		ft_printf("Error: Not valid symbol '%c'\n", obj);
 		exit(1);
@@ -25,22 +25,93 @@ char	*get_path(const t_symbol s)
 {
 	switch (s)
 	{
-	case collectable:
+	case COLLECTABLE:
 		return (TEXTURE_COLLECTABLE);
-	case escape:
+	case ESCAPE:
 		return (TEXTURE_EXIT);
-	case obstacle:
+	case OBSTACLE:
 		return (TEXTURE_WALL);
-	case player:
+	case PLAYER:
 		return (TEXTURE_PLAYER);
-	case space:
+	case SPACE:
 		return (TEXTURE_FLOOR);
 	}
 }
 
+int	count(const t_span *data, const t_symbol s)
+{
+	int	count;
+	int	i;
 
-//TODO: bool	count(const t_span *map, const t_symbol s)
+	i = 0;
+	count = 0;
+	while (i < data->nx * data->ny)
+	{
+		if (data->elems[i] == s)
+			count++;
+		++i;
+	}
+	return (count);
+}
 
+void	fill(const char *file, t_span *data)
+{
+	int	fd;
+	int	y;
+	int	x;
+
+	fd = open_file(file);
+	y = 0;
+	while (y < data->ny)
+	{
+		char *line = get_next_line(fd);
+		x = 0;
+		while (x < data->nx)
+		{
+			data->elems[data->nx * y + x] = convert(line[x]);
+			++x;
+		}
+		free(line);
+		++y;
+	}
+	close(fd);
+}
+
+int	find(const t_span *data, const t_symbol s)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->nx * data->ny)
+	{
+		if (data->elems[i] == s)
+			return (i);
+		++i;
+	}
+	return (-1);
+}
+
+void print(const t_span* data)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < data->ny)
+	{
+		x = 0;
+		while (x < data->nx)
+		{
+			ft_printf("%d", data->elems[data->nx * y + x]);
+			++x;
+		}
+		ft_printf("\n");
+		++y;
+	}
+}
+//: }}}
+
+//: file.c {{{
 int open_file(const char *file) {
 	int fd;
 
@@ -95,68 +166,102 @@ int count_rows(const char *file)
 	return count;
 }
 
-void fill(const char *file, t_span *map)
-{
-	int	fd;
-	int	y;
-	int	x;
-
-	fd = open_file(file);
-	y = 0;
-	while (y < map->ny)
-	{
-		char *line = get_next_line(fd);
-		x = 0;
-		while (x < map->nx)
-		{
-			map->data[map->nx * y + x] = convert(line[x]);
-			++x;
-		}
-		free(line);
-		++y;
-	}
-	close(fd);
-}
-
 t_span	init(const char *file)
 {
-	t_span	map;
+	t_span	data;
 
-	map.nx = get_line_len(file);
-	map.ny = count_rows(file);
-	map.data = (t_symbol *) malloc(sizeof(t_symbol) * map.nx * map.ny);
-	if (!map.data)
+	data.nx = get_line_len(file);
+	data.ny = count_rows(file);
+	data.elems = (t_symbol *) malloc(sizeof(t_symbol) * data.nx * data.ny);
+	if (!data.elems)
 	{
 		ft_printf("Error: memory allocation");
-		free(map.data);
+		free(data.elems);
 		exit(1);
 	}
-	fill(file, &map);
-	/* if (count(&map, player) != 1 || count(&map, escape) != 1)
+	fill(file, &data);
+	if (count(&data, PLAYER) != 1 || count(&data, ESCAPE) != 1)
 	{
-		ft_printf("Error: multiple players or escapes found on the map");
-		free(map.data);
+		ft_printf("Error: multiple players or escapes found on the data");
+		free(data.elems);
 		exit(1);
-	} */
-	return (map);
+	}
+	return (data);
+}
+//: }}}
+
+//: move.c {{{
+bool	is_possible_move(const t_span *data, const int target_ind)
+{
+	t_symbol	s;
+
+	if (target_ind < 0 || target_ind >= data->nx * data->ny)
+		return (false);
+	s = data->elems[target_ind];
+	if (s == OBSTACLE || (count(data, COLLECTABLE) != 0 && s == ESCAPE))
+		return (false);
+	return (true);
+}
+
+void	move_left(t_span *data)
+{
+	int	curr;
+
+	curr = find(data, PLAYER);
+	if (is_possible_move(data, curr - 1))
+	{
+		data->elems[curr] = SPACE;
+		data->elems[curr - 1] = PLAYER;
+	}
+}
+
+void	move_right(t_span *data)
+{
+	int	curr;
+
+	curr = find(data, PLAYER);
+	if (is_possible_move(data, curr + 1))
+	{
+		data->elems[curr] = SPACE;
+		data->elems[curr + 1] = PLAYER;
+	}
+}
+
+void	move_up(t_span *data)
+{
+	int	curr;
+
+	curr = find(data, PLAYER);
+	if (is_possible_move(data, curr - data->nx))
+	{
+		data->elems[curr] = SPACE;
+		data->elems[curr - data->nx] = PLAYER;
+	}
+}
+
+void	move_down(t_span *data)
+{
+	int	curr;
+
+	curr = find(data, PLAYER);
+	if (is_possible_move(data, curr + data->nx))
+	{
+		data->elems[curr] = SPACE;
+		data->elems[curr + data->nx] = PLAYER;
+	}
 }
 //: }}}
 
 //: draw.c {{{
-mlx_t *init_window(const t_span *map)
+mlx_t *init_window(const t_span *data)
 {
-	mlx_t *window = mlx_init(TILE * map->nx, TILE * map->ny, "Map Window", true);
+	mlx_t *window = mlx_init(TILE * data->nx, TILE * data->ny, "Map Window", true);
 	if (!window)
 	{
 		ft_printf("Error: Failed to initialise window");
 		exit(1);
 	}
 	return (window);
-}
-
-void window_input_hook(void *param) {
-	if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
-		mlx_close_window(param);
 }
 
 mlx_image_t	*get_image(mlx_t *window, const t_symbol s)
@@ -175,7 +280,7 @@ mlx_image_t	*get_image(mlx_t *window, const t_symbol s)
 	return (image);
 }
 
-void draw_background(const t_span *map, mlx_t *window)
+void draw_background(const t_span *data, mlx_t *window)
 {
 	int			i;
 	int			xt;
@@ -183,20 +288,20 @@ void draw_background(const t_span *map, mlx_t *window)
 	t_symbol	curr;
 
 	i = 0;
-	while (i < map->nx * map->ny)
+	while (i < data->nx * data->ny)
 	{
-		curr = map->data[i];
-		if (curr == collectable || curr == player)
-			curr = space;
+		curr = data->elems[i];
+		if (curr == COLLECTABLE || curr == PLAYER)
+			curr = SPACE;
 
-		xt = TILE * (i % map->nx);
-		yt = TILE * (i / map->nx);
+		xt = TILE * (i % data->nx);
+		yt = TILE * (i / data->nx);
 		mlx_image_to_window(window, get_image(window, curr), xt, yt);
 		++i;
 	}
 }
 
-void draw_foreground(const t_span *map, mlx_t *window)
+void draw_foreground(const t_span *data, mlx_t *window)
 {
 	int			i;
 	int			xt;
@@ -204,60 +309,67 @@ void draw_foreground(const t_span *map, mlx_t *window)
 	t_symbol	curr;
 
 	i = 0;
-	while (i < map->nx * map->ny)
+	while (i < data->nx * data->ny)
 	{
-		curr = map->data[i];
-		if (curr == collectable || curr == player)
+		curr = data->elems[i];
+		if (curr == COLLECTABLE || curr == PLAYER)
 		{
-			xt = TILE * (i % map->nx);
-			yt = TILE * (i / map->nx);
+			xt = TILE * (i % data->nx);
+			yt = TILE * (i / data->nx);
 			mlx_image_to_window(window, get_image(window, curr), xt, yt);
 		}
 		++i;
 	}
 }
-//: }}}
 
-void print(const t_span map)
+void	key_hook(mlx_key_data_t keydata, void *args)
 {
-	int	x;
-	int	y;
+	t_map	*map;
 
-	y = 0;
-	while (y < map.ny)
+	map = args;
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
-		x = 0;
-		while (x < map.nx)
-		{
-			ft_printf("%d", map.data[map.nx * y + x]);
-			++x;
-		}
-		ft_printf("\n");
-		++y;
+		mlx_close_window(map->window);
+		return ;
 	}
+
+	print(&map->data);
+	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
+		move_right(&map->data);
+	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
+		move_left(&map->data);
+	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
+		move_up(&map->data);
+	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
+		move_down(&map->data);
+
+	ft_printf("count: %d\n", count(&map->data, COLLECTABLE));
+	print(&map->data);
 }
+//: }}}
 
 int	main(int argc, char **argv)
 {
-	mlx_t	*window;
-	t_span	map;
+	// mlx_t	*window;
+	// t_span	data;
+	t_map	map;
 
 	if (argc != 2)
 	{
-		ft_printf("Usage: %s map_file\n", argv[0]);
+		ft_printf("Usage: %s <map_file>\n", argv[0]);
 		exit(1);
 	}
+	map.data = init(argv[1]);
 
-	map = init(argv[1]);
-	print(map);
+	ft_printf("%d\n", find(&map.data, PLAYER));
+	ft_printf("%d\n", count(&map.data, PLAYER));
+	ft_printf("%d\n", count(&map.data, COLLECTABLE));
 
-	window = init_window(&map);
-	draw_background(&map, window);
-	draw_foreground(&map, window);
-	if (mlx_loop_hook(window, &window_input_hook, window) == 0)
-		ft_putstr_fd((char *)mlx_strerror(mlx_errno), 2);
-	// mlx_key_hook(window, &key_hook, window);
-	mlx_loop(window);
-	mlx_close_window(window);
+	map.window = init_window(&map.data);
+	draw_background(&map.data, map.window);
+	draw_foreground(&map.data, map.window);
+	mlx_key_hook(map.window, &key_hook, &map);
+	mlx_loop(map.window);
+	mlx_close_window(map.window);
 	return (0);
 }

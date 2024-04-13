@@ -28,21 +28,34 @@
 #  define TEXTURE_COLLECTABLE "./textures/collectable.png"
 # endif
 
-typedef enum e_symbol {
-	collectable,
-	escape,
-	obstacle,
-	player,
-	space
+typedef enum e_symbol
+{
+	COLLECTABLE,
+	ESCAPE,
+	OBSTACLE,
+	PLAYER,
+	SPACE
 } t_symbol;
 
 /**
  * data is a flatten array.
  */
-typedef struct s_span {
-	t_symbol	*data;
+typedef struct s_span
+{
+	t_symbol	*elems;
 	int			nx;
 	int			ny;
 } t_span;
+
+/**
+ * Workaround to pass multiple arguments to mlx_key_hook
+ */
+typedef struct s_map
+{
+	t_span	data;
+	mlx_t	*window;
+} t_map;
+
+int open_file(const char *file);
 
 # endif
