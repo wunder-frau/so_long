@@ -1,7 +1,7 @@
 NAME		=	so_long
 CC			=	cc
 CFLAGS	=	-Wextra -Wall -Werror -Wunreachable-code -Ofast -g
-SRCS		=	$(addprefix ./srcs/, main.c)
+SRCS		=	$(addprefix ./src/, main.c)
 OBJS		=	$(SRCS:.c=.o)
 HEADER		=	so_long.h
 GLFW_DIR	=	/Users/$(USER)/.brew/opt/glfw/lib
@@ -41,7 +41,7 @@ re:				fclean all
 
 # HEADERS	:= -I ./include -I $(LIBMLX)/include
 # LIBS	:= $(LIBMLX)/build/libmlx42.a -ldl -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -pthread -lm
-# SRCS	:= $(addprefix ./srcs/, error_handler.c main.c map_init.c)
+# SRCS	:= $(addprefix ./src/, error_handler.c main.c map_init.c)
 # LIBFT 	:= libft/libft.a
 # OBJS	:= ${SRCS:.c=.o}
 
