@@ -19,7 +19,7 @@
 #  define TEXTURE_WALL "./textures/test_green.png"
 # endif
 # ifndef TEXTURE_PLAYER
-#  define TEXTURE_PLAYER "./textures/player.png"
+#  define TEXTURE_PLAYER "./textures/player_new.png"
 # endif
 # ifndef TEXTURE_EXIT
 #  define TEXTURE_EXIT "./textures/exit.png"
@@ -36,6 +36,14 @@ typedef enum e_symbol
 	PLAYER,
 	SPACE
 } t_symbol;
+
+typedef enum e_direction
+{
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
+} t_direction;
 
 /**
  * data is a flatten array.
@@ -56,6 +64,7 @@ typedef struct s_map
 	mlx_t	*window;
 } t_map;
 
+mlx_image_t	*get_image(mlx_t *window, const t_symbol s);
 int open_file(const char *file);
 
 # endif

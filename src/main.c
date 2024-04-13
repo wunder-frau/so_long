@@ -203,52 +203,66 @@ bool	is_possible_move(const t_span *data, const int target_ind)
 	return (true);
 }
 
-void	move_left(t_span *data)
+int	get_delta(const t_span *data, const t_direction d)
 {
-	int	curr;
-
-	curr = find(data, PLAYER);
-	if (is_possible_move(data, curr - 1))
+	switch (d)
 	{
-		data->elems[curr] = SPACE;
-		data->elems[curr - 1] = PLAYER;
+	case LEFT:
+		return (-1);
+	case RIGHT:
+		return (+1);
+	case UP:
+		return (-data->nx);
+	case DOWN:
+		return (+data->nx);
 	}
 }
 
-void	move_right(t_span *data)
+void	redraw_player(mlx_t *window, const int xt, const int yt)
 {
-	int	curr;
+	mlx_image_to_window(window, get_image(window, SPACE), xt, yt);
+	mlx_image_to_window(window, get_image(window, PLAYER), xt, yt);
+}
 
-	curr = find(data, PLAYER);
-	if (is_possible_move(data, curr + 1))
+void	draw_movement(t_map *map, const t_direction d, const int curr)
+{
+	int			xt;
+	int			yt;
+
+	xt = TILE * (curr % map->data.nx);
+	yt = TILE * (curr / map->data.nx);
+	mlx_image_to_window(map->window, get_image(map->window, SPACE), xt, yt);
+	switch (d)
 	{
-		data->elems[curr] = SPACE;
-		data->elems[curr + 1] = PLAYER;
+	case LEFT:
+		redraw_player(map->window, xt - TILE, yt);
+		return ;
+	case RIGHT:
+		redraw_player(map->window, xt + TILE, yt);
+		return ;
+	case UP:
+		redraw_player(map->window, xt, yt - TILE);
+		return ;
+	case DOWN:
+		redraw_player(map->window, xt, yt + TILE);
+		return ;
 	}
 }
 
-void	move_up(t_span *data)
+void	move_player(t_map *map, const t_direction d)
 {
 	int	curr;
+	int	delta;
 
-	curr = find(data, PLAYER);
-	if (is_possible_move(data, curr - data->nx))
-	{
-		data->elems[curr] = SPACE;
-		data->elems[curr - data->nx] = PLAYER;
-	}
-}
-
-void	move_down(t_span *data)
-{
-	int	curr;
-
-	curr = find(data, PLAYER);
-	if (is_possible_move(data, curr + data->nx))
-	{
-		data->elems[curr] = SPACE;
-		data->elems[curr + data->nx] = PLAYER;
-	}
+	curr = find(&map->data, PLAYER);
+	delta = get_delta(&map->data, d);
+	if (!is_possible_move(&map->data, curr + delta))
+		return ;
+	if (count(&map->data, COLLECTABLE) == 0 && map->data.elems[curr + delta] == ESCAPE)
+		mlx_close_window(map->window);
+	map->data.elems[curr] = SPACE;
+	map->data.elems[curr + delta] = PLAYER;
+	draw_movement(map, d, curr);
 }
 //: }}}
 
@@ -293,7 +307,6 @@ void draw_background(const t_span *data, mlx_t *window)
 		curr = data->elems[i];
 		if (curr == COLLECTABLE || curr == PLAYER)
 			curr = SPACE;
-
 		xt = TILE * (i % data->nx);
 		yt = TILE * (i / data->nx);
 		mlx_image_to_window(window, get_image(window, curr), xt, yt);
@@ -332,19 +345,14 @@ void	key_hook(mlx_key_data_t keydata, void *args)
 		mlx_close_window(map->window);
 		return ;
 	}
-
-	print(&map->data);
-	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
-		move_right(&map->data);
 	if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS)
-		move_left(&map->data);
-	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
-		move_up(&map->data);
+		move_player(map, LEFT);
+	if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS)
+		move_player(map, RIGHT);
 	if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS)
-		move_down(&map->data);
-
-	ft_printf("count: %d\n", count(&map->data, COLLECTABLE));
-	print(&map->data);
+		move_player(map, DOWN);
+	if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS)
+		move_player(map, UP);
 }
 //: }}}
 
