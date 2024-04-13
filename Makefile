@@ -1,6 +1,6 @@
 NAME		=	so_long
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -g
+CFLAGS	=	-Wextra -Wall -Werror -Wunreachable-code -Ofast -g
 SRCS		=	$(addprefix ./srcs/, main.c)
 OBJS		=	$(SRCS:.c=.o)
 HEADER		=	so_long.h
@@ -15,7 +15,7 @@ $(LIBFT):
 					@make -C ./libft
 
 $(MLX):
-					@cd MLX42 && cmake -B build && cmake --build build
+					@cd MLX42 && cmake -B build && cmake --build build -j4
 
 $(NAME):		$(OBJS) $(MLX) $(LIBFT) $(HEADER)
 					@$(CC) $(OBJS) $(MLX) $(LIBFT) -ldl -pthread -lm -L$(GLFW_DIR) -lglfw -I $(MLX_HEADER) -o $(NAME)

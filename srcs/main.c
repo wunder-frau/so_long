@@ -161,12 +161,11 @@ int init_player_pos(t_span *data) {
             ++x;
         }
         if (player_found) {
-        ft_printf("init_player_pos:%d, %d, player_f:%d\n", data->player_pos->x, data->player_pos->y, player_found);
             break;
         }
         ++y;
     }
-
+    ft_printf("init_player_pos:%d, %d, player_f:%d\n", data->player_pos->x, data->player_pos->y, player_found);
     if (!player_found) { 
         fprintf(stderr, "Error: Player position not found\n");
         free(data->player_pos); 
@@ -207,18 +206,18 @@ mlx_t *init_map(char *file) {
         return NULL;
     }
     s.window = mlx;
-    ft_printf("After initializing player position: x=%d, y=%d\n", s.player_pos->x, s.player_pos->y);
-    s.floor = init_image(&s, TEXTURE_FLOOR, '0');
-    s.obstacle = init_image(&s, TEXTURE_WALL, '1');
-    s.player = init_image(&s, TEXTURE_PLAYER, 'P');
-    if (init_player_pos(&s) == -1) {
+        if (init_player_pos(&s) == -1) {
         fprintf(stderr, "Error initializing player position\n");
         free(s.flatten);
         return NULL;
     }
+    // ft_printf("After initializing player position: x=%d, y=%d\n", s.player_pos->x, s.player_pos->y);
+    s.floor = init_image(&s, TEXTURE_FLOOR, '0');
+    s.obstacle = init_image(&s, TEXTURE_WALL, '1');
+    s.player = init_image(&s, TEXTURE_PLAYER, 'P');
+    ft_printf("After initializing player position: x=%d, y=%d\n", s.player_pos->x, s.player_pos->y);
     s.collect = init_image(&s, TEXTURE_COLLECTABLE, 'C');
     s.exit = init_image(&s, TEXTURE_EXIT, 'E');
-
     free(s.flatten);
     return mlx;
 }
