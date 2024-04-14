@@ -305,7 +305,7 @@ void draw_background(const t_span *data, mlx_t *window)
 	while (i < data->nx * data->ny)
 	{
 		curr = data->elems[i];
-		if (curr == COLLECTABLE || curr == PLAYER)
+		if (curr == COLLECTABLE || curr == PLAYER || curr == ESCAPE)
 			curr = SPACE;
 		xt = TILE * (i % data->nx);
 		yt = TILE * (i / data->nx);
@@ -325,7 +325,7 @@ void draw_foreground(const t_span *data, mlx_t *window)
 	while (i < data->nx * data->ny)
 	{
 		curr = data->elems[i];
-		if (curr == COLLECTABLE || curr == PLAYER)
+		if (curr == COLLECTABLE || curr == PLAYER || ESCAPE)
 		{
 			xt = TILE * (i % data->nx);
 			yt = TILE * (i / data->nx);
