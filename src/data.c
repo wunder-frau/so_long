@@ -70,8 +70,13 @@ void	fill(const char *file, t_span *data)
 		x = 0;
 		while (x < data->nx)
 		{
-			data->elems[data->nx * y + x] = convert(line[x]);
-			++x;
+			if ((int)ft_strlen(line) <= data->nx)
+			{
+				data->elems[data->nx * y + x] = convert(line[x]);
+				++x;
+			}
+			ft_printf("Error: Map is not rectangular. See this line: '%s'\n", line);
+			exit(1);
 		}
 		free(line);
 		++y;
