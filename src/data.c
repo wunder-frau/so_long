@@ -55,6 +55,22 @@ int	count(const t_span *data, const t_symbol s)
 	}
 	return (count);
 }
+int ft_strlen_l(const char *str) {
+    int length = 0;
+    
+    while (*str != '\0' && *str != '\n' && *str != '\r') {
+        length++;
+		printf("strlen_1!!!!!: %d\n", length);
+        str++;
+    }
+    
+    if (*str == '\0') {
+		printf("strlen: %d\n", length);
+		return(length + 1);
+    }
+    
+    return length;
+}
 
 void	fill(const char *file, t_span *data)
 {
@@ -70,13 +86,20 @@ void	fill(const char *file, t_span *data)
 		x = 0;
 		while (x < data->nx)
 		{
-			if ((int)ft_strlen(line) <= data->nx)
+			int c = ft_strlen_l(line);
+			printf("Line: '%s'\n", line);
+			printf("Length: %d\n", c);
+			printf("Dimensions: %d %d\n", data->nx, data->ny);
+			if (c == data->nx)
 			{
 				data->elems[data->nx * y + x] = convert(line[x]);
 				++x;
 			}
-			ft_printf("Error: Map is not rectangular. See this line: '%s'\n", line);
-			exit(1);
+			else
+			{
+				ft_printf("Error: Map is not rectangular. See this line: '%s'\n", line);
+				exit(1);
+			}
 		}
 		free(line);
 		++y;
