@@ -5,12 +5,15 @@ t_symbol	convert(const char obj)
 	switch (obj)
 	{
 	case 'C':
+	case 'c':
 		return (COLLECTABLE);
 	case 'E':
+	case 'e':
 		return (ESCAPE);
 	case '1':
 		return (OBSTACLE);
 	case 'P':
+	case 'p':
 		return (PLAYER);
 	case '0':
 		return (SPACE);
