@@ -61,6 +61,10 @@ t_span	init(const char *file)
 
 	data.nx = get_line_len(file);
 	data.ny = count_rows(file);
+	// if (data.nx == 0 || data.ny == 0) {
+    //     printf("Error: File is empty\n");
+    //     exit(1);
+    // }
 	data.elems = (t_symbol *) malloc(sizeof(t_symbol) * data.nx * data.ny);
 	if (!data.elems)
 	{
