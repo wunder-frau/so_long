@@ -32,5 +32,7 @@ int	main(int argc, char **argv)
 	mlx_key_hook(map.window, &key_hook, &map);
 	mlx_loop(map.window);
 	mlx_close_window(map.window);
+	mlx_terminate(map.window);
+	free(&map.data);
 	return (0);
 }
