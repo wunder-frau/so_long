@@ -28,7 +28,7 @@ int	main(int argc, char **argv)
 	ft_printf("%d\n", find(&map.data, PLAYER));
 	ft_printf("%d\n", count(&map.data, PLAYER));
 	ft_printf("%d\n", count(&map.data, COLLECTABLE));
-	//mlx_set_setting(MLX_STRETCH_IMAGE, true);
+	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	map.window = init_window(&map.data);
 	draw_background(&map.data, map.window);
 	draw_foreground(&map.data, map.window);
