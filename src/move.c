@@ -1,5 +1,13 @@
 #include "../so_long.h"
 
+static void	handle_moves(void)
+{
+	static int	moves;
+
+	moves++;
+	ft_printf("Number of moves: %i\n", moves);
+}
+
 bool	is_possible_move(const t_span *data, const int target_ind)
 {
 	t_symbol	s;
@@ -60,19 +68,28 @@ void	draw_movement(t_map *map, const t_direction d, const int curr)
 
 void	move_player(t_map *map, const t_direction d)
 {
-	int	curr;
-	int	delta;
+	int			curr;
+	int			delta;
+	// static int	moves;
+
+	// moves++;
+	// ft_printf("Number of moves: %i\n", moves);
 
 	curr = find(&map->data, PLAYER);
 	delta = get_delta(&map->data, d);
 	if (!is_possible_move(&map->data, curr + delta))
 		return ;
+	handle_moves();
 	if (count(&map->data, COLLECTABLE) == 0 && map->data.elems[curr + delta] == ESCAPE)
+	{
+		ft_printf("Congrats! You did!\n");
 		mlx_close_window(map->window);
+	}
 	map->data.elems[curr] = SPACE;
 	map->data.elems[curr + delta] = PLAYER;
 	draw_movement(map, d, curr);
+	
 	// delete
-	print(&map->data);
-	ft_printf("\n");
+	// print(&map->data);
+	// ft_printf("\n");
 }

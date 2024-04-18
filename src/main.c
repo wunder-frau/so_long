@@ -22,9 +22,6 @@ int	main(int argc, char **argv)
 		write(2, "Error: Invalid file format. Use a .ber file.\n", 45);
 	
 	map.data = init(argv[1]);
-	// ?
-	if (map.data.elems == 0)
-		return (write(2, "Error\nMap invalid\n", 18));
 	ft_printf("%d\n", find(&map.data, PLAYER));
 	ft_printf("%d\n", count(&map.data, PLAYER));
 	ft_printf("%d\n", count(&map.data, COLLECTABLE));
