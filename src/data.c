@@ -5,15 +5,12 @@ t_symbol	convert(const char obj)
 	switch (obj)
 	{
 	case 'C':
-	case 'c':
 		return (COLLECTABLE);
 	case 'E':
-	case 'e':
 		return (ESCAPE);
 	case '1':
 		return (OBSTACLE);
 	case 'P':
-	case 'p':
 		return (PLAYER);
 	case '0':
 		return (SPACE);
@@ -55,22 +52,6 @@ int	count(const t_span *data, const t_symbol s)
 	}
 	return (count);
 }
-int ft_strlen_l(const char *str) {
-    int length = 0;
-    
-    while (*str != '\0' && *str != '\n' && *str != '\r') {
-        length++;
-		printf("strlen_1!!!!!: %d\n", length);
-        str++;
-    }
-    
-    if (*str == '\0') {
-		printf("strlen: %d\n", length);
-		return(length + 1);
-    }
-    
-    return length;
-}
 
 void	fill(const char *file, t_span *data)
 {
@@ -84,24 +65,18 @@ void	fill(const char *file, t_span *data)
 	{
 		char *line = get_next_line(fd);
 		x = 0;
-		while (x < data->nx)
+		while (line[x] != '\n' && line[x])
 		{
-			int c = ft_strlen_l(line);
-			printf("Line: '%s'\n", line);
-			printf("Length: %d\n", c);
-			printf("Dimensions: %d %d\n", data->nx, data->ny);
-			if (c == data->nx)
-			{
+			if (x < data->nx)
 				data->elems[data->nx * y + x] = convert(line[x]);
-				++x;
-			}
-			else
-			{
-				ft_printf("Error: Map is not rectangular. See this line: '%s'\n", line);
-				exit(1);
-			}
+			++x;
 		}
 		free(line);
+		if (x != data->nx)
+		{
+			ft_printf("Error: Map is not rectangular, see line %d\n", y + 1);
+			exit(1);
+		}
 		++y;
 	}
 	close(fd);
