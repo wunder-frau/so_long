@@ -23,6 +23,7 @@ mlx_image_t	*get_image(mlx_t *window, const t_symbol s)
 	if (!image)
 	{
 		ft_printf("Error: Failed to create '%s' texture\n", get_path(s));
+		mlx_delete_texture(texture);
 		exit(1);
 	}
 	return (image);
