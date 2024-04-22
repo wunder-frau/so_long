@@ -75,7 +75,7 @@ t_span	init(const char *file)
 	fill(file, &data);
 	// chaeck walls
 	// flood fill
-	is_wall_frst_and_lst(&data);
+	check_frst_lst_lines(&data);
 	check_constrained(&data);
 	if (count(&data, PLAYER) != 1 || count(&data, ESCAPE) != 1)
 	{

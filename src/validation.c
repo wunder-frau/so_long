@@ -28,17 +28,27 @@ void	check_constrained(const t_span *data)
 	}
 }
 
-void	is_wall_frst_and_lst(const t_span *data)
+void	check_frst_lst_lines(const t_span *data)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	while (i <= data->nx)
+	while (i < data->nx)
 	{
 		if (data->elems[i] != OBSTACLE)
 		{
-			ft_printf("Error: symbol (%d) in first line is not obst", data->elems[i]);
-			ft_printf("\n");
+			ft_printf("Error: symbol at index %d in first line is not an obstacle\n", i);
+			print(data);
+			exit(1);
+		}
+		i++;
+	}
+	i = (data->nx * data->ny) - data->nx;
+	while (i < ((data->nx * data->ny) - data->nx) + data->nx)
+	{
+		if (data->elems[i] != OBSTACLE)
+		{
+			ft_printf("Error: symbol at index %d in last line is not an obstacle\n", i);
 			print(data);
 			exit(1);
 		}

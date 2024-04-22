@@ -98,6 +98,6 @@ void		draw_foreground(const t_span *data, mlx_t *window);
 void		key_hook(mlx_key_data_t keydata, void *args);
 
 void	check_constrained(const t_span *data);
-void	is_wall_frst_and_lst(const t_span *data);
+void	check_frst_lst_lines(const t_span *data);
 
 # endif
