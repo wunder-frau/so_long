@@ -82,31 +82,3 @@ void	check_frst_lst_symb(const t_span *data)
 		y++;
 	}
 }
-
-
-void	check_frst_lst_symb(const t_span *data)
-{
-	int	y;
-	int	first_index;
-	int	last_index;
-
-	y = 0;
-	while (y < data->ny)
-	{
-		first_index = y * data->nx;
-		last_index = first_index + data->nx - 1;
-		if (data->elems[first_index] != OBSTACLE)
-		{
-			ft_printf("Error: symbol at index %d in the first position of line %d is not an obstacle\n", first_index, y);
-			print(data);
-			exit(1);
-		}
-		if (data->elems[last_index] != OBSTACLE)
-		{
-			ft_printf("Error: symbol at index %d in the last position of line %d is not an obstacle\n", last_index, y);
-			print(data);
-			exit(1);
-		}
-		y++;
-	}
-}
