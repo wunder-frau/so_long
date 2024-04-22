@@ -2,7 +2,7 @@ NAME		=	so_long
 CC			=	cc
 CFLAGS	=	-Wextra -Wall -Werror -Wunreachable-code -Ofast -g
 SRCS		=	$(addprefix ./src/, data.c file.c move.c \
-							draw.c main.c)
+							draw.c validation.c main.c)
 OBJS		=	$(SRCS:.c=.o)
 HEADER		=	so_long.h
 GLFW_DIR	=	/Users/$(USER)/.brew/opt/glfw/lib

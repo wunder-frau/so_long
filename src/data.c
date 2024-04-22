@@ -65,10 +65,10 @@ void	fill(const char *file, t_span *data)
 	{
 		char *line = get_next_line(fd);
 		if (!line) {
-            ft_printf("Error: Could not read line %d\n", y + 1);
-            close(fd);
-            return ;
-        }
+			ft_printf("Error: Could not read line %d\n", y + 1);
+			close(fd);
+			exit(1);
+		}
 		x = 0;
 		while (line[x] != '\n' && line[x])
 		{
@@ -80,8 +80,8 @@ void	fill(const char *file, t_span *data)
 		{
 			ft_printf("Error: Map is not rectangular, see line %d\n", y + 1);
 			free(line);
-            close(fd);
-            exit(1);
+			close(fd);
+			exit(1);
 		}
 		free(line);
 		++y;
