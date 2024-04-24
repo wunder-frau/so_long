@@ -97,7 +97,7 @@ void		draw_background(const t_span *data, mlx_t *window);
 void		draw_foreground(const t_span *data, mlx_t *window);
 void		key_hook(mlx_key_data_t keydata, void *args);
 
-void	check_constrained(const t_span *data);
+void	check_constrained(const t_span *data, const t_symbol elem);
 void	check_frst_lst_lines(const t_span *data);
 void	check_frst_lst_symb(const t_span *data);
 void	flood_fill(const t_span *data, const t_symbol init);

@@ -78,7 +78,9 @@ t_span	init(const char *file)
 	// flood fill
 	check_frst_lst_symb(&data);
 	check_frst_lst_lines(&data);
-	check_constrained(&data);
+	//check_constrained(&data, COLLECTABLE);
+	// check_constrained(&data, ESCAPE);
+	// check_constrained(&data, PLAYER);
 	if (count(&data, PLAYER) != 1 || count(&data, ESCAPE) != 1)
 	{
 		ft_printf("Error: none or multiple players or escapes found on the data");
