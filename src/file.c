@@ -73,6 +73,7 @@ t_span	init(const char *file)
 		exit(1);
 	}
 	fill(file, &data);
+	flood_fill(&data, PLAYER);
 	// check walls
 	// flood fill
 	check_frst_lst_symb(&data);
@@ -80,7 +81,7 @@ t_span	init(const char *file)
 	check_constrained(&data);
 	if (count(&data, PLAYER) != 1 || count(&data, ESCAPE) != 1)
 	{
-		ft_printf("Error: multiple players or escapes found on the data");
+		ft_printf("Error: none or multiple players or escapes found on the data");
 		free(data.elems);
 		exit(1);
 	}

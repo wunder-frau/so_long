@@ -1,5 +1,7 @@
 #include "flood_fill.h"
 
+// void	fill(t_span *data, const int index, t_symbol to_fill)
+
 void	fill(char **grid, t_point size, t_point cur, char to_fill)
 {
 	if (cur.y < 0 || cur.y >= size.y || cur.x < 0

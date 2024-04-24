@@ -82,3 +82,46 @@ void	check_frst_lst_symb(const t_span *data)
 		y++;
 	}
 }
+
+static void	filll(t_span *data, int index, const t_symbol init, const t_symbol to_fill)
+{
+	if (index < 0 || index > data->nx * data->ny || 
+		(data->elems[index] != init && data->elems[index] != to_fill))
+		return;
+	data->elems[index] = COLLECTABLE;
+	filll(data, index - 1, init, to_fill);
+	filll(data, index + 1, init, to_fill);
+	filll(data, index - data->nx, init, to_fill);
+	filll(data, index + data->nx, init, to_fill);
+}
+
+t_span	copy_span(const t_span	*in)
+{
+	int		i;
+	t_span	dup;
+	dup.nx = in->nx;
+	dup.ny = in->ny;
+	dup.elems = (t_symbol *) malloc(sizeof(t_symbol) * dup.nx * dup.ny);
+	if (!dup.elems)
+		return (dup);
+	i = 0;
+	while(i < dup.nx * dup.ny)
+	{
+		dup.elems[i] = in->elems[i];
+		i++;
+	}
+	return (dup);
+}
+
+void	flood_fill(const t_span *data_ptr, const t_symbol init)
+{
+	t_span dup;
+	// // fill(grid, size, begin, grid[begin.y][begin.x]);
+	// ft_printf("data->nx * data->ny %d\n", data->nx * data->ny);
+	// ft_printf("pidor %d\n", index);
+	dup = copy_span(data_ptr);
+	filll(&dup, find(data_ptr, init), init, SPACE);
+	print(data_ptr);
+	ft_printf("\n\n");
+	print(&dup);
+}
