@@ -85,7 +85,6 @@ void	check_frst_lst_symb(const t_span *data)
 
 static void	filll(t_span *data, const int index)
 {
-	// ft_printf("%d[%d]", index > data->nx * data->ny, )
 	if (index >= 0 && index < data->nx * data->ny &&
 		data->elems[index] != OBSTACLE)
 	{
@@ -115,12 +114,18 @@ t_span	copy_span(const t_span	*in)
 	return (dup);
 }
 
-void	flood_fill(const t_span *data_ptr, const t_symbol init)
+void	validate_map(const t_span *data_ptr, const t_symbol init)
 {
 	t_span	dup;
 	int		i;
 
 	dup = copy_span(data_ptr);
+	if (!dup.elems)
+	{
+		ft_printf("Error: memory allocation");
+		free(dup.elems);
+		exit(1);
+	}
 	print(&dup);
 	ft_printf("\n\n");
 	filll(&dup, find(data_ptr, init));
@@ -131,12 +136,14 @@ void	flood_fill(const t_span *data_ptr, const t_symbol init)
 	{
 		if (dup.elems[i] != OBSTACLE && dup.elems[i] != SPACE)
 		{
-			ft_printf("Error: !!!");
+			ft_printf("Error: Map must only contain obstacles and spaces.");
 			free(dup.elems);
 			exit(1);
 		}
 		i++;
 	}
+
+	free(dup.elems);
 	// print(data_ptr);
 	// ft_printf("\n\n");
 	// print(&dup);

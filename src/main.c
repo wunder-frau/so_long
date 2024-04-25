@@ -20,11 +20,8 @@ int	main(int argc, char **argv)
 	}
 	if (!ends_with_ber(argv[1]))
 		write(2, "Error: Invalid file format. Use a .ber file.\n", 45);
-	
+
 	map.data = init(argv[1]);
-	ft_printf("%d\n", find(&map.data, PLAYER));
-	ft_printf("%d\n", count(&map.data, PLAYER));
-	ft_printf("%d\n", count(&map.data, COLLECTABLE));
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	map.window = init_window(&map.data);
 	draw_background(&map.data, map.window);
@@ -33,6 +30,6 @@ int	main(int argc, char **argv)
 	mlx_loop(map.window);
 	mlx_close_window(map.window);
 	mlx_terminate(map.window);
-	//free(&map.data);
+	//free(&(map.data.elems));
 	return (0);
 }

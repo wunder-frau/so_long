@@ -69,23 +69,19 @@ t_span	init(const char *file)
 	if (!data.elems)
 	{
 		ft_printf("Error: memory allocation");
-		free(data.elems);
+		//free(data.elems);
 		exit(1);
 	}
 	fill(file, &data);
-	flood_fill(&data, PLAYER);
-	// check walls
-	// flood fill
+	validate_map(&data, PLAYER);
 	check_frst_lst_symb(&data);
 	check_frst_lst_lines(&data);
-	//check_constrained(&data, COLLECTABLE);
-	// check_constrained(&data, ESCAPE);
-	// check_constrained(&data, PLAYER);
 	if (count(&data, PLAYER) != 1 || count(&data, ESCAPE) != 1)
 	{
 		ft_printf("Error: none or multiple players or escapes found on the data");
 		free(data.elems);
 		exit(1);
 	}
+	//free(&data);
 	return (data);
 }
