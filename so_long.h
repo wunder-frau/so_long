@@ -35,7 +35,7 @@ typedef enum e_symbol
 	OBSTACLE,
 	PLAYER,
 	SPACE
-} t_symbol;
+}	t_symbol;
 
 typedef enum e_direction
 {
@@ -43,7 +43,7 @@ typedef enum e_direction
 	RIGHT,
 	UP,
 	DOWN
-} t_direction;
+}	t_direction;
 
 /**
  * data is a flatten array.
@@ -53,7 +53,7 @@ typedef struct s_span
 	t_symbol	*elems;
 	int			nx;
 	int			ny;
-} t_span;
+}	t_span;
 
 /**
  * Workaround to pass multiple arguments to mlx_key_hook
@@ -62,11 +62,11 @@ typedef struct s_map
 {
 	t_span	data;
 	mlx_t	*window;
-} t_map;
+}	t_map;
 
 // TO DELETE
 mlx_image_t	*get_image(mlx_t *window, const t_symbol s);
-int open_file(const char *file);
+int			open_file(const char *file);
 
 // data.c
 t_symbol	convert(const char obj);
@@ -74,8 +74,6 @@ char		*get_path(const t_symbol s);
 int			count(const t_span *data, const t_symbol s);
 void		fill(const char *file, t_span *data);
 int			find(const t_span *data, const t_symbol s);
-// delete later
-void		print(const t_span* data);
 
 // file.c
 int			open_file(const char *file);
@@ -97,7 +95,7 @@ void		draw_background(const t_span *data, mlx_t *window);
 void		draw_foreground(const t_span *data, mlx_t *window);
 void		key_hook(mlx_key_data_t keydata, void *args);
 
-void	check_constrained(const t_span *data, const t_symbol elem);
+// validation.c
 void	check_frst_lst_lines(const t_span *data);
 void	check_frst_lst_symb(const t_span *data);
 void	validate_map(const t_span *data, const t_symbol init);

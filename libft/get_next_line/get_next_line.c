@@ -92,7 +92,8 @@ char	*get_next_line(int fd)
 	buf = malloc(sizeof(*buf) * (BUFFER_SIZE + 1));
 	if (!buf)
 	{
-		free (temp);
+		if (temp)
+			free (temp);
 		temp = NULL;
 		return (NULL);
 	}
