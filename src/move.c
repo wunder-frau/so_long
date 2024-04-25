@@ -22,17 +22,16 @@ bool	is_possible_move(const t_span *data, const int target_ind)
 
 int	get_delta(const t_span *data, const t_direction d)
 {
-	switch (d)
-	{
-	case LEFT:
+	if (d == LEFT)
 		return (-1);
-	case RIGHT:
+	else if (d == RIGHT)
 		return (+1);
-	case UP:
+	else if (d == UP)
 		return (-data->nx);
-	case DOWN:
+	else if (d == DOWN)
 		return (+data->nx);
-	}
+	else
+		return (0);
 }
 
 void	redraw_player(mlx_t *window, const int xt, const int yt)
@@ -43,44 +42,34 @@ void	redraw_player(mlx_t *window, const int xt, const int yt)
 
 void	draw_movement(t_map *map, const t_direction d, const int curr)
 {
-	int			xt;
-	int			yt;
+	int	xt;
+	int	yt;
 
 	xt = TILE * (curr % map->data.nx);
 	yt = TILE * (curr / map->data.nx);
 	mlx_image_to_window(map->window, get_image(map->window, SPACE), xt, yt);
-	switch (d)
-	{
-	case LEFT:
+	if (d == LEFT)
 		redraw_player(map->window, xt - TILE, yt);
-		return ;
-	case RIGHT:
+	else if (d == RIGHT)
 		redraw_player(map->window, xt + TILE, yt);
-		return ;
-	case UP:
+	else if (d == UP)
 		redraw_player(map->window, xt, yt - TILE);
-		return ;
-	case DOWN:
+	else if (d == DOWN)
 		redraw_player(map->window, xt, yt + TILE);
-		return ;
-	}
 }
 
 void	move_player(t_map *map, const t_direction d)
 {
 	int			curr;
 	int			delta;
-	// static int	moves;
-
-	// moves++;
-	// ft_printf("Number of moves: %i\n", moves);
 
 	curr = find(&map->data, PLAYER);
 	delta = get_delta(&map->data, d);
 	if (!is_possible_move(&map->data, curr + delta))
 		return ;
 	handle_moves();
-	if (count(&map->data, COLLECTABLE) == 0 && map->data.elems[curr + delta] == ESCAPE)
+	if (count(&map->data, COLLECTABLE) == 0
+		&& map->data.elems[curr + delta] == ESCAPE)
 	{
 		ft_printf("Congrats! You did!\n");
 		mlx_close_window(map->window);
@@ -88,8 +77,4 @@ void	move_player(t_map *map, const t_direction d)
 	map->data.elems[curr] = SPACE;
 	map->data.elems[curr + delta] = PLAYER;
 	draw_movement(map, d, curr);
-	
-	// delete
-	// print(&map->data);
-	// ft_printf("\n");
 }
