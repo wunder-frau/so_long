@@ -29,39 +29,39 @@ static void	read_line(int fd, int y, t_span *data)
 	free(line);
 }
 
-t_symbol convert(const char obj)
+t_symbol	convert(const char obj)
 {
-    if (obj == 'C')
-        return COLLECTABLE;
+	if (obj == 'C')
+		return (COLLECTABLE);
 	else if (obj == 'E')
-        return ESCAPE;
-    else if (obj == '1')
-        return OBSTACLE;
-    else if (obj == 'P')
-        return PLAYER;
-    else if (obj == '0')
-        return SPACE;
-    else
+		return (ESCAPE);
+	else if (obj == '1')
+		return (OBSTACLE);
+	else if (obj == 'P')
+		return (PLAYER);
+	else if (obj == '0')
+		return (SPACE);
+	else
 	{
-        ft_printf("Error: Not valid symbol '%c'\n", obj);
-        exit(1);
-    }
+		ft_printf("Error: Not valid symbol '%c'\n", obj);
+		exit(1);
+	}
 }
 
 char	*get_path(const t_symbol s)
 {
-    if (s == COLLECTABLE)
-        return (TEXTURE_COLLECTABLE);
+	if (s == COLLECTABLE)
+		return (TEXTURE_COLLECTABLE);
 	else if (s == ESCAPE)
-        return (TEXTURE_EXIT);
+		return (TEXTURE_EXIT);
 	else if (s == OBSTACLE)
-        return (TEXTURE_WALL);
+		return (TEXTURE_WALL);
 	else if (s == PLAYER)
-        return (TEXTURE_PLAYER);
+		return (TEXTURE_PLAYER);
 	else if (s == SPACE)
-        return (TEXTURE_FLOOR);
+		return (TEXTURE_FLOOR);
 	else
-        return (NULL);
+		return (NULL);
 }
 
 int	count(const t_span *data, const t_symbol s)
@@ -82,15 +82,16 @@ int	count(const t_span *data, const t_symbol s)
 
 void	fill(const char *file, t_span *data)
 {
-	int fd = open_file(file);
-	int y = 0;
+	int	fd;
+	int	y;
 
+	fd = open_file(file);
+	y = 0;
 	while (y < data->ny)
 	{
 		read_line(fd, y, data);
 		++y;
 	}
-
 	close(fd);
 }
 
