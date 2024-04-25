@@ -1,9 +1,10 @@
-
 #include "../so_long.h"
 
-mlx_t *init_window(const t_span *data)
+mlx_t	*init_window(const t_span *data)
 {
-	mlx_t *window = mlx_init(TILE * data->nx, TILE * data->ny, "Map Window", true);
+	mlx_t	*window;
+	
+	window = mlx_init(TILE * data->nx, TILE * data->ny, "SO_LONG", true);
 	if (!window)
 	{
 		ft_printf("Error: Failed to initialise window");
@@ -29,7 +30,7 @@ mlx_image_t	*get_image(mlx_t *window, const t_symbol s)
 	return (image);
 }
 
-void draw_background(const t_span *data, mlx_t *window)
+void	draw_background(const t_span *data, mlx_t *window)
 {
 	int			i;
 	int			xt;
@@ -49,7 +50,7 @@ void draw_background(const t_span *data, mlx_t *window)
 	}
 }
 
-void draw_foreground(const t_span *data, mlx_t *window)
+void	draw_foreground(const t_span *data, mlx_t *window)
 {
 	int			i;
 	int			xt;

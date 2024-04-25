@@ -1,44 +1,47 @@
 #include "../so_long.h"
 
-static bool	is_constrained(const t_span *data, int i)
+static void	flood_fill(t_span *data, const int index)
 {
-	return (data->elems[i + 1] == OBSTACLE &&
-			data->elems[i + 1] == OBSTACLE &&
-			data->elems[i + data->nx] == OBSTACLE &&
-			data->elems[i - data->nx] == OBSTACLE);
+	if (index >= 0 && index < data->nx * data->ny
+		&& data->elems[index] != OBSTACLE)
+	{
+		data->elems[index] = OBSTACLE;
+		flood_fill(data, index - 1);
+		flood_fill(data, index + 1);
+		flood_fill(data, index - data->nx);
+		flood_fill(data, index + data->nx);
+	}
 }
 
-/**
- * Must be called after map validation
- * (since i + nx and i - nx can be out of range for man invalid map)
- */
-void	check_constrained(const t_span *data, const t_symbol elem)
+static t_span	copy_span(const t_span *in)
 {
-	int	i;
+	int		i;
+	t_span	dup;
 
+	dup.nx = in->nx;
+	dup.ny = in->ny;
+	dup.elems = (t_symbol *) malloc(sizeof(t_symbol) * dup.nx * dup.ny);
+	if (!dup.elems)
+		return (dup);
 	i = 0;
-	while (i < data->nx * data->ny)
+	while (i < dup.nx * dup.ny)
 	{
-		if (data->elems[i] == elem && is_constrained(data, i))
-		{
-			ft_printf("Error: elem=[%d] (%d,%d) is constrained", elem, i / data->nx, i % data->nx);
-			exit(1);
-		}
+		dup.elems[i] = in->elems[i];
 		i++;
 	}
+	return (dup);
 }
 
 void	check_frst_lst_lines(const t_span *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < data->nx)
 	{
 		if (data->elems[i] != OBSTACLE)
 		{
-			ft_printf("Error: symbol at index %d in first line is not an obstacle\n", i);
-			print(data);
+			ft_printf("Error\n index %d not an obstacle\n", i);
 			exit(1);
 		}
 		i++;
@@ -48,8 +51,7 @@ void	check_frst_lst_lines(const t_span *data)
 	{
 		if (data->elems[i] != OBSTACLE)
 		{
-			ft_printf("Error: symbol at index %d in last line is not an obstacle\n", i);
-			print(data);
+			ft_printf("Error\n Symb %d in last line is not an obstacle\n", i);
 			exit(1);
 		}
 		i++;
@@ -69,49 +71,16 @@ void	check_frst_lst_symb(const t_span *data)
 		last_index = first_index + data->nx - 1;
 		if (data->elems[first_index] != OBSTACLE)
 		{
-			ft_printf("Error: symbol at index %d in the first position of line %d is not an obstacle\n", first_index, y);
-			print(data);
+			ft_printf("Error\n Index %d line %d not '1'\n", first_index, y);
 			exit(1);
 		}
 		if (data->elems[last_index] != OBSTACLE)
 		{
-			ft_printf("Error: symbol at index %d in the last position of line %d is not an obstacle\n", last_index, y);
-			print(data);
+			ft_printf("Error\n Index %d line %d not '1'\n", last_index, y);
 			exit(1);
 		}
 		y++;
 	}
-}
-
-static void	filll(t_span *data, const int index)
-{
-	if (index >= 0 && index < data->nx * data->ny &&
-		data->elems[index] != OBSTACLE)
-	{
-		data->elems[index] = OBSTACLE;
-		filll(data, index - 1);
-		filll(data, index + 1);
-		filll(data, index - data->nx);
-		filll(data, index + data->nx);
-	}
-}
-
-t_span	copy_span(const t_span	*in)
-{
-	int		i;
-	t_span	dup;
-	dup.nx = in->nx;
-	dup.ny = in->ny;
-	dup.elems = (t_symbol *) malloc(sizeof(t_symbol) * dup.nx * dup.ny);
-	if (!dup.elems)
-		return (dup);
-	i = 0;
-	while(i < dup.nx * dup.ny)
-	{
-		dup.elems[i] = in->elems[i];
-		i++;
-	}
-	return (dup);
 }
 
 void	validate_map(const t_span *data_ptr, const t_symbol init)
@@ -122,29 +91,21 @@ void	validate_map(const t_span *data_ptr, const t_symbol init)
 	dup = copy_span(data_ptr);
 	if (!dup.elems)
 	{
-		ft_printf("Error: memory allocation");
+		ft_printf("Error\n Memory allocation\n");
 		free(dup.elems);
 		exit(1);
 	}
-	print(&dup);
-	ft_printf("\n\n");
-	filll(&dup, find(data_ptr, init));
-	print(&dup);
-	ft_printf("\n\n");
+	flood_fill(&dup, find(data_ptr, init));
 	i = 0;
 	while (i < dup.nx * dup.ny)
 	{
 		if (dup.elems[i] != OBSTACLE && dup.elems[i] != SPACE)
 		{
-			ft_printf("Error: Map must only contain obstacles and spaces.");
+			ft_printf("Error\n Map must only contain obstacles and spaces.\n");
 			free(dup.elems);
 			exit(1);
 		}
 		i++;
 	}
-
 	free(dup.elems);
-	// print(data_ptr);
-	// ft_printf("\n\n");
-	// print(&dup);
 }
