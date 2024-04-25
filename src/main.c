@@ -1,12 +1,13 @@
 #include "../so_long.h"
 
-bool	ends_with_ber(const char *str) {
-    size_t len = ft_strlen(str);
-	ft_printf("%d\n", len);
-	ft_printf("%s\n", &str + (len - 4));
-    if (ft_strncmp(".ber", str + len - 4, 4) == 0)
-        return (true);
-    return (false);
+bool	ends_with_ber(const char *str)
+{
+	size_t	len;
+	
+	len = ft_strlen(str);
+	if (ft_strncmp(".ber", str + len - 4, 4) == 0)
+		return (true);
+	return (false);
 }
 
 int	main(int argc, char **argv)
@@ -20,7 +21,6 @@ int	main(int argc, char **argv)
 	}
 	if (!ends_with_ber(argv[1]))
 		write(2, "Error: Invalid file format. Use a .ber file.\n", 45);
-
 	map.data = init(argv[1]);
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	map.window = init_window(&map.data);
@@ -30,6 +30,5 @@ int	main(int argc, char **argv)
 	mlx_loop(map.window);
 	mlx_close_window(map.window);
 	mlx_terminate(map.window);
-	//free(&(map.data.elems));
 	return (0);
 }
