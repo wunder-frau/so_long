@@ -78,13 +78,13 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 /* ft_printf */
-int	ft_putchar(char c);
-int	ft_put_percent(void);
-int	ft_putstr(const char *s);
-int	ft_put_unumber(unsigned long n, const char *base);
-int	ft_put_ptr(unsigned long p);
-int	ft_put_digit(int nb);
-int	ft_printf(const char *format_str, ...);
+int		ft_putchar(char c);
+int		ft_put_percent(void);
+int		ft_putstr(const char *s);
+int		ft_put_unumber(unsigned long n, const char *base);
+int		ft_put_ptr(unsigned long p);
+int		ft_put_digit(int nb);
+int		ft_printf(const char *format_str, ...);
 
 /* get_next_line */
 size_t	ft_strlen_gnl(const char *str);

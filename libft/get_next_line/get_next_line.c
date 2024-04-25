@@ -29,7 +29,7 @@ static char	*ft_extract_next_line(char **temp)
 		*temp = NULL;
 		return (NULL);
 	}
-	rem_txt = ft_substr (rem_txt, 0,  ft_strlen_gnl(rem_txt));
+	rem_txt = ft_substr (rem_txt, 0, ft_strlen_gnl(rem_txt));
 	free (*temp);
 	*temp = rem_txt;
 	return (extr_line);
