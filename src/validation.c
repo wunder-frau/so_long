@@ -41,7 +41,7 @@ void	check_frst_lst_lines(const t_span *data)
 	{
 		if (data->elems[i] != OBSTACLE)
 		{
-			ft_printf("Error\n index %d not an obstacle\n", i);
+			ft_putstr_fd("Error\n Symb in first line is not '1'\n", 2);
 			exit(1);
 		}
 		i++;
@@ -51,7 +51,7 @@ void	check_frst_lst_lines(const t_span *data)
 	{
 		if (data->elems[i] != OBSTACLE)
 		{
-			ft_printf("Error\n Symb %d in last line is not an obstacle\n", i);
+			ft_putstr_fd("Error\n Symb in last line is not '1'\n", 2);
 			exit(1);
 		}
 		i++;
@@ -71,12 +71,12 @@ void	check_frst_lst_symb(const t_span *data)
 		last_index = first_index + data->nx - 1;
 		if (data->elems[first_index] != OBSTACLE)
 		{
-			ft_printf("Error\n Index %d line %d not '1'\n", first_index, y);
+			ft_putstr_fd("Error\n Symb in first pos is not '1'\n", 2);
 			exit(1);
 		}
 		if (data->elems[last_index] != OBSTACLE)
 		{
-			ft_printf("Error\n Index %d line %d not '1'\n", last_index, y);
+			ft_putstr_fd("Error\n Symb in last pos is not '1'\n", 2);
 			exit(1);
 		}
 		y++;
@@ -91,7 +91,7 @@ void	validate_map(const t_span *data_ptr, const t_symbol init)
 	dup = copy_span(data_ptr);
 	if (!dup.elems)
 	{
-		ft_printf("Error\n Memory allocation\n");
+		ft_putstr_fd("Error\n Memory allocation\n", 2);
 		free(dup.elems);
 		exit(1);
 	}
@@ -101,7 +101,7 @@ void	validate_map(const t_span *data_ptr, const t_symbol init)
 	{
 		if (dup.elems[i] != OBSTACLE && dup.elems[i] != SPACE)
 		{
-			ft_printf("Error\n Map must only contain obstacles and spaces.\n");
+			ft_putstr_fd("Error\n Should be obstacles and spaces.\n", 2);
 			free(dup.elems);
 			exit(1);
 		}

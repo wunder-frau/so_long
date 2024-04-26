@@ -96,8 +96,8 @@ void		draw_foreground(const t_span *data, mlx_t *window);
 void		key_hook(mlx_key_data_t keydata, void *args);
 
 // validation.c
-void	check_frst_lst_lines(const t_span *data);
-void	check_frst_lst_symb(const t_span *data);
-void	validate_map(const t_span *data, const t_symbol init);
+void		check_frst_lst_lines(const t_span *data);
+void		check_frst_lst_symb(const t_span *data);
+void		validate_map(const t_span *data, const t_symbol init);
 
 # endif
