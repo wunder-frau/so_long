@@ -14,10 +14,10 @@
 #  define TEXTURE_FLOOR "./textures/wall.png"
 # endif
 # ifndef TEXTURE_WALL
-#  define TEXTURE_WALL "./textures/test_green.png"
+#  define TEXTURE_WALL "./textures/space.png"
 # endif
 # ifndef TEXTURE_PLAYER
-#  define TEXTURE_PLAYER "./textures/player_new.png"
+#  define TEXTURE_PLAYER "./textures/player.png"
 # endif
 # ifndef TEXTURE_EXIT
 #  define TEXTURE_EXIT "./textures/exit.png"

@@ -6,11 +6,14 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		ft_printf("Usage: %s <map_file>\n", argv[0]);
+		ft_putstr_fd("Error\n To few arguments\n", 2);
 		exit(1);
 	}
 	if (!ends_with_ber(argv[1]))
-		write(2, "Error: Invalid file format. Use a .ber file.\n", 45);
+	{
+		ft_putstr_fd("Error\n Invalid file format. Use a .ber file.\n", 2);
+		exit(1);
+	}
 	map.data = init(argv[1]);
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
 	map.window = init_window(&map.data);
