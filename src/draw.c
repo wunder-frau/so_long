@@ -3,11 +3,11 @@
 mlx_t	*init_window(const t_span *data)
 {
 	mlx_t	*window;
-	
+
 	window = mlx_init(TILE * data->nx, TILE * data->ny, "SO_LONG", true);
 	if (!window)
 	{
-		ft_printf("Error: Failed to initialise window");
+		ft_putstr_fd("Error\n Failed to initialise window\n", 2);
 		exit(1);
 	}
 	return (window);
@@ -23,7 +23,7 @@ mlx_image_t	*get_image(mlx_t *window, const t_symbol s)
 	mlx_delete_texture(texture);
 	if (!image)
 	{
-		ft_printf("Error: Failed to create '%s' texture\n", get_path(s));
+		ft_putstr_fd("Error\n Failed to create texture\n", 2);
 		mlx_delete_texture(texture);
 		exit(1);
 	}
