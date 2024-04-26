@@ -1,15 +1,5 @@
 #include "../so_long.h"
 
-bool	ends_with_ber(const char *str)
-{
-	size_t	len;
-	
-	len = ft_strlen(str);
-	if (ft_strncmp(".ber", str + len - 4, 4) == 0)
-		return (true);
-	return (false);
-}
-
 int	main(int argc, char **argv)
 {
 	t_map	map;

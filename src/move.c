@@ -1,14 +1,6 @@
 #include "../so_long.h"
 
-static void	handle_moves(void)
-{
-	static int	moves;
-
-	moves++;
-	ft_printf("Number of moves: %i\n", moves);
-}
-
-bool	is_possible_move(const t_span *data, const int target_ind)
+static bool	is_possible_move(const t_span *data, const int target_ind)
 {
 	t_symbol	s;
 
@@ -20,7 +12,7 @@ bool	is_possible_move(const t_span *data, const int target_ind)
 	return (true);
 }
 
-int	get_delta(const t_span *data, const t_direction d)
+static int	get_delta(const t_span *data, const t_direction d)
 {
 	if (d == LEFT)
 		return (-1);
@@ -34,13 +26,13 @@ int	get_delta(const t_span *data, const t_direction d)
 		return (0);
 }
 
-void	redraw_player(mlx_t *window, const int xt, const int yt)
+static void	redraw_player(mlx_t *window, const int xt, const int yt)
 {
 	mlx_image_to_window(window, get_image(window, SPACE), xt, yt);
 	mlx_image_to_window(window, get_image(window, PLAYER), xt, yt);
 }
 
-void	draw_movement(t_map *map, const t_direction d, const int curr)
+static void	draw_movement(t_map *map, const t_direction d, const int curr)
 {
 	int	xt;
 	int	yt;
