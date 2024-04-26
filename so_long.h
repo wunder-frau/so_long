@@ -3,10 +3,8 @@
 
 # include <fcntl.h>
 # include <stdbool.h>
-# include <stdio.h>
 
 # include "MLX42/include/MLX42/MLX42.h"
-
 # include "libft/libft.h"
 
 # ifndef TILE
@@ -64,28 +62,17 @@ typedef struct s_map
 	mlx_t	*window;
 }	t_map;
 
-// TO DELETE
-mlx_image_t	*get_image(mlx_t *window, const t_symbol s);
-int			open_file(const char *file);
-
 // data.c
 t_symbol	convert(const char obj);
 char		*get_path(const t_symbol s);
-int			count(const t_span *data, const t_symbol s);
 void		fill(const char *file, t_span *data);
 int			find(const t_span *data, const t_symbol s);
 
 // file.c
-int			open_file(const char *file);
-int			get_line_len(const char *file);
-int			count_rows(const char *file);
+int			count(const t_span *data, const t_symbol s);
 t_span		init(const char *file);
 
 // move.c
-bool		is_possible_move(const t_span *data, const int target_ind);
-int			get_delta(const t_span *data, const t_direction d);
-void		redraw_player(mlx_t *window, const int xt, const int yt);
-void		draw_movement(t_map *map, const t_direction d, const int curr);
 void		move_player(t_map *map, const t_direction d);
 
 // draw.c
@@ -99,5 +86,10 @@ void		key_hook(mlx_key_data_t keydata, void *args);
 void		check_frst_lst_lines(const t_span *data);
 void		check_frst_lst_symb(const t_span *data);
 void		validate_map(const t_span *data, const t_symbol init);
+
+// utils.c
+void		handle_moves(void);
+bool		ends_with_ber(const char *str);
+int			open_file(const char *file);
 
 # endif

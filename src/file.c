@@ -21,25 +21,39 @@ static int	get_line_len(const char *file)
 	return (count);
 }
 
+int	count(const t_span *data, const t_symbol s)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while (i < data->nx * data->ny)
+	{
+		if (data->elems[i] == s)
+			count++;
+		++i;
+	}
+	return (count);
+}
+
 static int	count_rows(const char *file)
 {
 	int		count;
 	int		fd;
 	char	c;
-	int		eof;
 
 	fd = open_file(file);
 	count = 0;
-	eof = 0;
+	if (fd == -1)
+		return (-1);
 	while (read(fd, &c, 1) > 0)
 	{
 		if (c == '\n')
 			count++;
-		else if (c == EOF)
-			eof = 1;
 	}
 	close(fd);
-	if (!eof)
+	if (count > 0 && c != '\n')
 		count++;
 	return (count);
 }

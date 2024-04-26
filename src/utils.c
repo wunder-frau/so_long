@@ -24,9 +24,6 @@ int	open_file(const char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-	{
-		ft_putstr_fd("Error opening the file\n", 2);
-		perror(file);
-	}
+		ft_putstr_fd("Error\n opening the file\n", 2);
 	return (fd);
 }

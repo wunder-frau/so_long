@@ -64,22 +64,6 @@ char	*get_path(const t_symbol s)
 		return (NULL);
 }
 
-int	count(const t_span *data, const t_symbol s)
-{
-	int	count;
-	int	i;
-
-	i = 0;
-	count = 0;
-	while (i < data->nx * data->ny)
-	{
-		if (data->elems[i] == s)
-			count++;
-		++i;
-	}
-	return (count);
-}
-
 void	fill(const char *file, t_span *data)
 {
 	int	fd;
