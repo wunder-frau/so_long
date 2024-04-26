@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   data.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/26 14:54:59 by istasheu          #+#    #+#             */
+/*   Updated: 2024/04/26 14:55:03 by istasheu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../so_long.h"
 
 static void	read_line(int fd, int y, t_span *data)
@@ -8,7 +20,7 @@ static void	read_line(int fd, int y, t_span *data)
 	line = get_next_line(fd);
 	if (!line)
 	{
-		ft_printf("Error: Could not read line %d\n", y + 1);
+		ft_putstr_fd("Error\n Could not read line\n", 2);
 		close(fd);
 		exit(1);
 	}
@@ -21,7 +33,7 @@ static void	read_line(int fd, int y, t_span *data)
 	}
 	if (x != data->nx)
 	{
-		ft_printf("Error: Map is not rectangular, see line %d\n", y + 1);
+		ft_putstr_fd("Error\n Map is not rectangular", 2);
 		free(line);
 		close(fd);
 		exit(1);
@@ -43,7 +55,7 @@ t_symbol	convert(const char obj)
 		return (SPACE);
 	else
 	{
-		ft_printf("Error: Not valid symbol '%c'\n", obj);
+		ft_putstr_fd("Error\n Not valid symbol\n", 1);
 		exit(1);
 	}
 }

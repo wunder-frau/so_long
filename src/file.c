@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   file.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/26 14:55:38 by istasheu          #+#    #+#             */
+/*   Updated: 2024/04/26 14:55:41 by istasheu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../so_long.h"
 
 /**
@@ -21,22 +33,6 @@ static int	get_line_len(const char *file)
 	return (count);
 }
 
-int	count(const t_span *data, const t_symbol s)
-{
-	int	count;
-	int	i;
-
-	i = 0;
-	count = 0;
-	while (i < data->nx * data->ny)
-	{
-		if (data->elems[i] == s)
-			count++;
-		++i;
-	}
-	return (count);
-}
-
 static int	count_rows(const char *file)
 {
 	int		count;
@@ -55,6 +51,22 @@ static int	count_rows(const char *file)
 	close(fd);
 	if (count > 0 && c != '\n')
 		count++;
+	return (count);
+}
+
+int	count(const t_span *data, const t_symbol s)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while (i < data->nx * data->ny)
+	{
+		if (data->elems[i] == s)
+			count++;
+		++i;
+	}
 	return (count);
 }
 
