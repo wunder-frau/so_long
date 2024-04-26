@@ -15,7 +15,7 @@
 /**
  * Calculate first line length.
  */
-static int	get_line_len(const char *file)
+static int	get_first_line_len(const char *file)
 {
 	int		count;
 	int		fd;
@@ -54,22 +54,6 @@ static int	count_rows(const char *file)
 	return (count);
 }
 
-int	count(const t_span *data, const t_symbol s)
-{
-	int	count;
-	int	i;
-
-	i = 0;
-	count = 0;
-	while (i < data->nx * data->ny)
-	{
-		if (data->elems[i] == s)
-			count++;
-		++i;
-	}
-	return (count);
-}
-
 static void	validate_span(t_span *data)
 {
 	validate_map(data, PLAYER);
@@ -87,7 +71,7 @@ t_span	init(const char *file)
 {
 	t_span	data;
 
-	data.nx = get_line_len(file);
+	data.nx = get_first_line_len(file);
 	data.ny = count_rows(file);
 	if (data.nx == 0 || data.ny == 0)
 	{

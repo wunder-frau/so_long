@@ -39,3 +39,19 @@ int	open_file(const char *file)
 		ft_putstr_fd("Error\n opening the file\n", 2);
 	return (fd);
 }
+
+int	count(const t_span *data, const t_symbol s)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while (i < data->nx * data->ny)
+	{
+		if (data->elems[i] == s)
+			count++;
+		++i;
+	}
+	return (count);
+}
