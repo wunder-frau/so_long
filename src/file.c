@@ -1,22 +1,9 @@
 #include "../so_long.h"
 
-int	open_file(const char *file)
-{
-	int	fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-	{
-		ft_putstr_fd("Error opening the file\n", 2);
-		perror(file);
-	}
-	return (fd);
-}
-
 /**
  * Calculate first line length.
  */
-int	get_line_len(const char *file)
+static int	get_line_len(const char *file)
 {
 	int		count;
 	int		fd;
@@ -34,7 +21,7 @@ int	get_line_len(const char *file)
 	return (count);
 }
 
-int	count_rows(const char *file)
+static int	count_rows(const char *file)
 {
 	int		count;
 	int		fd;
@@ -57,6 +44,19 @@ int	count_rows(const char *file)
 	return (count);
 }
 
+static void	validate_span(t_span *data)
+{
+	validate_map(data, PLAYER);
+	check_frst_lst_symb(data);
+	check_frst_lst_lines(data);
+	if (count(data, PLAYER) != 1 || count(data, ESCAPE) != 1)
+	{
+		ft_putstr_fd("Error\nInvalid player or escape data\n", 2);
+		free(data->elems);
+		exit(1);
+	}
+}
+
 t_span	init(const char *file)
 {
 	t_span	data;
@@ -65,24 +65,16 @@ t_span	init(const char *file)
 	data.ny = count_rows(file);
 	if (data.nx == 0 || data.ny == 0)
 	{
-		printf("Error\n: File is empty\n");
+		ft_putstr_fd("Error\n: File is empty\n", 2);
 		exit(1);
 	}
 	data.elems = (t_symbol *) malloc(sizeof(t_symbol) * data.nx * data.ny);
 	if (!data.elems)
 	{
-		ft_printf("Error: memory allocation");
+		ft_putstr_fd("Error: memory allocation", 2);
 		exit(1);
 	}
 	fill(file, &data);
-	validate_map(&data, PLAYER);
-	check_frst_lst_symb(&data);
-	check_frst_lst_lines(&data);
-	if (count(&data, PLAYER) != 1 || count(&data, ESCAPE) != 1)
-	{
-		ft_printf("Error\n Invalid player or escape data\n");
-		free(data.elems);
-		exit(1);
-	}
+	validate_span(&data);
 	return (data);
 }
