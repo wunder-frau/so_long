@@ -52,11 +52,11 @@ static int	count_rows(const char *file)
 	return (count);
 }
 
-static void	validate_span(t_span *data)
+static void	validate(t_span *data)
 {
-	validate_map(data, PLAYER);
 	check_frst_lst_symb(data);
 	check_frst_lst_lines(data);
+	validate_map(data, PLAYER);
 	if (count(data, PLAYER) != 1 || count(data, ESCAPE) != 1)
 	{
 		ft_putstr_fd("Error\nInvalid player or escape data\n", 2);
@@ -83,6 +83,6 @@ t_span	init(const char *file)
 		exit(1);
 	}
 	fill(file, &data);
-	validate_span(&data);
+	validate(&data);
 	return (data);
 }
