@@ -90,7 +90,7 @@ void		validate_map(const t_span *data, const t_symbol init);
 // utils.c
 void		handle_moves(void);
 bool		ends_with_ber(const char *str);
-int			open_file(const char *file);
+int			safe_open(const char *file);
 int			count(const t_span *data, const t_symbol s);
 
 # endif

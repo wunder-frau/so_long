@@ -21,7 +21,7 @@ static int	get_first_line_len(const char *file)
 	int		fd;
 	char	c;
 
-	fd = open_file(file);
+	fd = safe_open(file);
 	count = 0;
 	while (read(fd, &c, 1) > 0)
 	{
@@ -39,10 +39,8 @@ static int	count_rows(const char *file)
 	int		fd;
 	char	c;
 
-	fd = open_file(file);
+	fd = safe_open(file);
 	count = 0;
-	if (fd == -1)
-		return (-1);
 	while (read(fd, &c, 1) > 0)
 	{
 		if (c == '\n')

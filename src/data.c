@@ -81,7 +81,7 @@ void	fill(const char *file, t_span *data)
 	int	fd;
 	int	y;
 
-	fd = open_file(file);
+	fd = safe_open(file);
 	y = 0;
 	while (y < data->ny)
 	{
