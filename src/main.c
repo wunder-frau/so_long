@@ -33,6 +33,7 @@ int	main(int argc, char **argv)
 	draw_foreground(&map.data, map.window);
 	mlx_key_hook(map.window, &key_hook, &map);
 	mlx_loop(map.window);
+	free(map.data.elems);
 	mlx_terminate(map.window);
 	return (0);
 }
