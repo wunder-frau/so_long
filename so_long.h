@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: istasheu <istasheu@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/29 12:53:01 by istasheu          #+#    #+#             */
+/*   Updated: 2024/04/29 12:53:04 by istasheu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
@@ -93,4 +105,4 @@ bool		ends_with_ber(const char *str);
 int			safe_open(const char *file);
 int			count(const t_span *data, const t_symbol s);
 
-# endif
+#endif

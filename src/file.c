@@ -57,9 +57,10 @@ static void	validate(t_span *data)
 	check_frst_lst_symb(data);
 	check_frst_lst_lines(data);
 	validate_map(data, PLAYER);
-	if (count(data, PLAYER) != 1 || count(data, ESCAPE) != 1)
+	if (count(data, PLAYER) != 1 || count(data, ESCAPE) != 1
+		|| count(data, COLLECTABLE) == 0)
 	{
-		ft_putstr_fd("Error\nInvalid player or escape data\n", 2);
+		ft_putstr_fd("Error\n Invalid player or escape data\n", 2);
 		free(data->elems);
 		exit(1);
 	}
@@ -73,13 +74,13 @@ t_span	init(const char *file)
 	data.ny = count_rows(file);
 	if (data.nx == 0 || data.ny == 0)
 	{
-		ft_putstr_fd("Error\n: File is empty\n", 2);
+		ft_putstr_fd("Error\n File is empty\n", 2);
 		exit(1);
 	}
 	data.elems = (t_symbol *) malloc(sizeof(t_symbol) * data.nx * data.ny);
 	if (!data.elems)
 	{
-		ft_putstr_fd("Error: memory allocation", 2);
+		ft_putstr_fd("Error\n Memory allocation", 2);
 		exit(1);
 	}
 	fill(file, &data);
