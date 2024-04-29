@@ -60,7 +60,7 @@ static void	validate(t_span *data)
 	if (count(data, PLAYER) != 1 || count(data, ESCAPE) != 1
 		|| count(data, COLLECTABLE) == 0)
 	{
-		ft_putstr_fd("Error\n Invalid player or escape data\n", 2);
+		ft_putstr_fd("Error\n Invalid player, coll or escape data\n", 2);
 		free(data->elems);
 		exit(1);
 	}
