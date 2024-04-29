@@ -1,6 +1,6 @@
 NAME		=	so_long
 CC			=	cc
-CFLAGS	=	-Wextra -Wall -Werror
+CFLAGS		=	-Wextra -Wall -Werror
 SRCS		=	$(addprefix ./src/, data.c file.c move.c \
 									draw.c validation.c \
 									main.c utils.c)
