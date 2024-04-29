@@ -62,6 +62,7 @@ void	check_frst_lst_symb(const t_span *data)
 		y++;
 	}
 }
+
 static t_span	copy_span(const t_span *in)
 {
 	int		i;
